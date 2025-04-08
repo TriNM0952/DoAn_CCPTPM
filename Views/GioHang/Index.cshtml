@@ -1,0 +1,218 @@
+﻿@model GioHangViewModel
+
+<section class="h-100 h-custom" style="background-color: #f8f9fa;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12">
+                <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                    <div class="card-body p-0">
+                        <div class="row g-0">
+                            <div class="col-lg-8">
+                                <div class="p-5">
+                                    <div class="d-flex justify-content-between align-items-center mb-5">
+                                        <h1 class="fw-bold mb-0 text-black">Giỏ Hàng</h1>
+
+                                        @if (Model == null || !Model.DsGioHang.Any())
+                                        {
+                                            <h6 class="mb-0 text-muted">Giỏ hàng của bạn trống.</h6>
+                                        }
+                                        else
+                                        {
+                                            <h6 class="mb-0 text-muted">@Model.DsGioHang.Count() items</h6>
+                                        }
+                                    </div>
+
+                                    @foreach (var item in Model.DsGioHang)
+                                    {
+                                        <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                            <div class="col-md-2 col-lg-2 col-xl-2">
+                                                @if (item.Inventory.SupplierProduct?.ProductImages?.Any() == true)
+                                                {
+                                                    <img id="mainImage" src="@item.Inventory.SupplierProduct.ProductImages.First().Url" class="img-fluid rounded mb-3" alt="Hình ảnh sản phẩm chính" />
+                                                }
+                                                else
+                                                {
+                                                    <p>Không có hình ảnh sản phẩm chính</p>
+                                                }
+                                            </div>
+                                            <div class="col-md-3 col-lg-3 col-xl-3">
+                                                <h6 class="text-black mb-0">@item.Inventory?.SupplierProduct?.ProductName</h6>
+                                            </div>
+                                            <div class="col-md-2 d-flex justify-content-center">
+                                                <a class="btn btn-link px-2" asp-action="Giam" asp-route-giohangId="@item.Id">
+                                                    <i class="fas fa-minus"></i>
+                                                </a>
+
+                                                <input id="@($"quantity_{item.Id}")" min="1" value="@item.Quantity" type="number"
+                                                       class="form-control form-control-sm text-center" style="width: 100px;" readonly />
+
+                                                <a class="btn btn-link px-2" asp-action="Tang" asp-route-giohangId="@item.Id">
+                                                    <i class="fas fa-plus"></i>
+                                                </a>
+                                            </div>
+                                            <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                                <h6 class="mb-0" style="color:red;">@String.Format("{0:#,##0}", item.Quantity * (item.Inventory?.SellingPrice ?? 0)) VNĐ</h6>
+                                            </div>
+                                            <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                                <a class="text-muted remove-item" asp-action="Xoa" asp-route-giohangId="@item.Id">
+                                                    <i class="fas fa-times"></i>
+                                                </a>
+                                            </div>
+
+                                            <!-- Thêm checkbox để chọn sản phẩm -->
+                                            <div class="col-md-1 col-lg-1 col-xl-1 text-center">
+                                                <input type="checkbox" class="select-item-for-payment" data-item-id="@item.Id" />
+                                            </div>
+                                        </div>
+                                        <hr class="my-4">
+                                    }
+
+                                    <div class="pt-5">
+                                        <h6 class="mb-0">
+                                            <a asp-controller="inventory" asp-action="Index" class="text-body">
+                                                <i class="fas fa-long-arrow-alt-left me-2"></i>Quay về shop
+                                            </a>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 bg-grey">
+                                <div class="p-5">
+                                    <h3 class="fw-bold mb-5 mt-2 pt-1">THÀNH TIỀN</h3>
+
+                                    <div class="mb-4">
+                                        <label for="discountCode" class="form-label">Mã giảm giá:</label>
+                                        <input type="text" name="discountCode" id="discountCode" class="form-control mb-2" placeholder="Nhập mã giảm giá" />
+                                        <button type="button" id="apply-discount" class="btn btn-secondary">Áp dụng</button>
+
+                                        <!-- Hiển thị thông báo -->
+                                        <p id="discount-message" class="text-success mt-2"></p>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between mb-5">
+                                        <h5 class="text-uppercase mb-0 me-5 d-flex align-items-center">Tổng cộng: </h5>
+                                        <span id="total-price" class="lead fw-normal total-price" style="color:red;">
+                                            @String.Format("{0:#,##0}", ViewBag.TotalItems ?? 0) VNĐ
+                                        </span>
+                                    </div>
+
+                                    @if (ViewBag.SuccessMessage != null)
+                                    {
+                                        <p class="text-success">@ViewBag.SuccessMessage</p>
+                                    }
+                                    @if (ViewBag.ErrorMessage != null)
+                                    {
+                                        <p class="text-danger">@ViewBag.ErrorMessage</p>
+                                    }
+
+                                    <div class="d-flex justify-content-end">
+                                        <a asp-controller="GioHang" asp-action="ThanhToan" class="btn btn-primary btn-lg me-2 fw-bold mb-0 text-black" style="background:red;margin:0">THANH TOÁN</a>
+                                        <a asp-controller="Home" asp-action="Index" class="btn btn-light btn-lg me-2">Tiếp tục mua hàng</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Thêm jQuery từ CDN của Google -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+<script>
+    $(document).ready(function () {
+      
+        
+        // Xử lý sự kiện click cho nút Áp dụng mã giảm giá
+        $("#apply-discount").click(function () {
+            var discountCode = $("#discountCode").val().trim(); // Lấy mã giảm giá từ input
+
+            if (discountCode === "") {
+                alert("Vui lòng nhập mã giảm giá.");
+                return;
+            }
+
+            $.ajax({
+                url: '/GioHang/ApplyDiscount', // URL tới action xử lý mã giảm giá
+                type: 'POST',
+                data: { discountCode: discountCode },
+                success: function (response) {
+                    if (response.success) {
+                        // Hiển thị thông báo và cập nhật tổng tiền
+                        $("#discount-message").text(response.discountMessage);
+                        $("#total-price").text(formatCurrency(response.newTotalPrice));
+                    } else {
+                        // Hiển thị thông báo lỗi nếu không áp dụng được mã giảm giá
+                        $("#discount-message").text(response.errorMessage).addClass('text-danger');
+                    }
+                },
+                error: function () {
+                    alert("Có lỗi xảy ra khi áp dụng mã giảm giá.");
+                }
+            });
+        });
+
+        // Hàm định dạng số tiền
+        function formatCurrency(value) {
+            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + " VNĐ";
+        }
+    });
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        // Lắng nghe sự kiện khi checkbox được chọn hoặc bỏ chọn
+        $(".select-item-for-payment").change(function () {
+            var itemId = $(this).data("item-id");  // Lấy ID của sản phẩm
+            var isChecked = $(this).prop("checked"); // Kiểm tra trạng thái của checkbox
+
+            // Nếu checkbox được chọn, lưu sản phẩm vào sessionStorage
+            if (isChecked) {
+                var selectedItems = JSON.parse(sessionStorage.getItem("selectedItems")) || [];
+                if (!selectedItems.includes(itemId)) {
+                    selectedItems.push(itemId); // Thêm ID sản phẩm vào danh sách đã chọn
+                }
+                sessionStorage.setItem("selectedItems", JSON.stringify(selectedItems));
+            } else {
+                // Nếu checkbox bỏ chọn, xóa sản phẩm khỏi sessionStorage
+                var selectedItems = JSON.parse(sessionStorage.getItem("selectedItems")) || [];
+                selectedItems = selectedItems.filter(id => id !== itemId); // Loại bỏ ID sản phẩm khỏi danh sách đã chọn
+                sessionStorage.setItem("selectedItems", JSON.stringify(selectedItems));
+            }
+        });
+
+        // Gửi thông tin sản phẩm đã chọn lên server khi thanh toán
+        $("#checkoutButton").click(function () {
+            var selectedItems = JSON.parse(sessionStorage.getItem("selectedItems")) || [];
+
+            $.ajax({
+                url: '/GioHang/ThanhToan',  // URL tới action xử lý thanh toán
+                method: 'POST',
+                data: { selectedItems: selectedItems },
+                success: function (response) {
+                    if (response.success) {
+                        // Xử lý sau khi thanh toán thành công
+                        alert("Thanh toán thành công!");
+                        // Bạn có thể chuyển hướng đến trang thanh toán hoặc giỏ hàng
+                        window.location.href = "/GioHang/ThanhToan";
+                    } else {
+                        alert("Có lỗi xảy ra trong quá trình thanh toán.");
+                    }
+                },
+                error: function () {
+                    alert("Có lỗi xảy ra khi thanh toán.");
+                }
+            });
+        });
+    });
+</script>
+
+
+                    

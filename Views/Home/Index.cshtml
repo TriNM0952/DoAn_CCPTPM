@@ -1,0 +1,1106 @@
+﻿@model IEnumerable<Lab03.Models.Inventory>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="success-alert" class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+<style>
+    /* Style for header section */
+    .wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    .section-category {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .category-item {
+        text-align: center;
+        color: #333;
+        text-decoration: none;
+        margin: 10px;
+    }
+
+        .category-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+            .category-item img:hover {
+                transform: scale(1.1);
+            }
+
+    .title {
+        display: block;
+        margin-top: 5px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .section-home-banner .carousel-inner img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .box-banner img {
+        width: 100%;
+        height: auto;
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+
+    /* General Section */
+    .section-padding {
+        padding: 20px 0;
+    }
+
+    .featured-product img {
+        border-radius: 10px;
+        width: 100%;
+    }
+
+    .featured-product h5 {
+        font-size: 18px;
+        margin: 10px 0;
+    }
+
+    .featured-product .btn {
+        background-color: #28a745;
+        color: white;
+        font-weight: bold;
+    }
+
+    .box {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header styles */
+    .box-header {
+        background-color: #59AB6E; /* Red background */
+        color: #fff; /* White text */
+        padding: -3px; /* Inner padding */
+        border-radius: 7px 7px 0 0; /* Rounded top corners */
+        font-size: 90px; /* Font size */
+        font-weight: bold; /* Bold text */
+        display: flex; /* Flexbox for layout */
+        align-items: center; /* Vertically center content */
+    }
+
+        /* Icon styles */
+        .box-header i {
+            margin-bottom: -11px;
+            margin-top: 17px;
+            margin-right: 5px;
+            margin-left: 11px;
+        }
+
+    /* Body styles */
+    .box-body {
+        padding: 10px; /* Padding for the list */
+    }
+
+    /* List styles */
+    .link-trend-list {
+        list-style-type: none; /* Remove bullets */
+        margin-top: -10px;
+        padding: 0;
+    }
+
+    /* List item styles */
+    .link-trend-item {
+        margin-bottom: -3px; /* Space between items */
+    }
+
+        /* Link styles */
+        .link-trend-item a {
+            text-decoration: none; /* Remove underline */
+            color: #000; /* Black text */
+        }
+
+        /* Title styles */
+        .link-trend-item .title {
+            font-weight: bold; /* Bold title */
+            display: block; /* Block layout for spacing */
+            margin-bottom: -5px; /* Space below title */
+            font-size: 15px;
+        }
+
+        /* Description styles */
+        .link-trend-item .desc {
+            font-size: 10px; /* Smaller font for description */
+            font-style: italic;
+            color: #666; /* Gray text */
+        }
+
+        /* Hover effects */
+        .link-trend-item a:hover .title {
+            color: #dc3545; /* Red color on hover */
+        }
+
+        .link-trend-item a:hover .desc {
+            color: #333; /* Darker gray on hover */
+        }
+
+    .section-home-banner {
+        max-width: 100%; /* Đảm bảo chiều rộng tối đa không vượt quá container */
+        overflow: hidden; /* Giới hạn nội dung tràn */
+        margin: 20px auto; /* Giữ khoảng cách hợp lý và căn giữa */
+        padding: 0; /* Loại bỏ padding thừa */
+        box-sizing: border-box; /* Tính toán đúng chiều rộng bao gồm padding */
+        /* Section Header */
+    }
+
+    .section-header {
+        margin-left: -32px; /* Đẩy sát cạnh trái */
+        margin-right: -32px; /* Đẩy sát cạnh phải */
+        margin-top: -20px;
+        background-color: #59AB6E; /* Màu nền đỏ */
+        padding: 15px 20px; /* Khoảng cách bên trong */
+        border-radius: 8px 8px 0 0; /* Bo góc chỉ phần trên */
+        display: flex;
+        justify-content: space-between; /* Căn đều khoảng cách giữa tiêu đề và tab */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        color: #fff; /* Màu chữ trắng */
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ */
+    }
+
+    .section-title {
+        font-size: 22px;
+        color: #fff;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section-tabs {
+        display: flex;
+        gap: 10px;
+    }
+
+    .tab-btn {
+        border: none;
+        padding: 5px 10px;
+        font-size: 14px;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+        .tab-btn:hover {
+            background-color: #004d00;
+            color: #fff;
+        }
+
+    /* Product Card */
+    .product-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        padding: 15px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        position: relative;
+        text-align: center;
+    }
+
+        .product-card .product-badge {
+            position: absolute;
+            top: 0px;
+            left: -1px;
+            padding: 5px 10px;
+            font-size: 12px;
+            color: #fff;
+            border-radius: 4px;
+            background-color: #020202a3;
+        }
+
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+    .product-details .badge {
+        background-color: #ffc107;
+        color: #fff;
+        font-size: 12px;
+        padding: 5px;
+        border-radius: 4px;
+        display: inline-block;
+        margin-bottom: 10px;
+    }
+
+        .product-details .badge.hot {
+            background-color: #dc3545;
+        }
+
+    .product-title {
+        font-size: 17px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .product-rating {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        margin-bottom: 10px;
+        color: #666;
+    }
+
+        .product-rating .stars {
+            color: #ffc107;
+        }
+
+    .product-price {
+        font-size: 16px;
+        font-weight: bold;
+        color: #dc3545;
+        margin-bottom: 10px;
+    }
+
+        .product-price .old-price {
+            font-size: 12px;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 5px;
+        }
+
+    .product-info {
+        font-size: 12px;
+        color: #666;
+    }
+
+    .featured-products-section {
+        border: 1px solid #ddd; /* Viền xám nhạt */
+        border-radius: 8px; /* Bo góc */
+        padding: 20px; /* Khoảng cách bên trong */
+        background-color: #fff; /* Nền trắng */
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ */
+        margin-bottom: 30px; /* Khoảng cách dưới */
+    }
+
+
+
+    a {
+        text-decoration: none;
+    }
+
+    .product-carousel-control-prev {
+        background: transparent;
+        border: none;
+        margin-left: -45px;
+        left: -63px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 15%;
+        color: #fff;
+        text-align: center;
+        opacity: .5;
+        transition: opacity .15s ease;
+    }
+
+    .product-carousel-control-next {
+        background: transparent;
+        border: none;
+        margin-left: -45px;
+        right: -109px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 15%;
+        color: #fff;
+        text-align: center;
+        opacity: .5;
+        transition: opacity .15s ease;
+    }
+
+    .carousel-control-next-icon, .carousel-control-prev-icon {
+        border-radius: 5px;
+        background-color: #999999;
+        width: 2rem;
+        height: 3rem;
+        background-repeat: no-repeat;
+        background-position: 50%;
+        background-size: 100% 100%;
+    }
+</style>
+
+<!-- Modal Search -->
+<div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="w-100 pt-1 mb-5 text-right">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="" method="get" class="modal-content modal-body border-0 p-0">
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
+                <button type="submit" class="input-group-text bg-success text-light">
+                    <i class="fa fa-fw fa-search text-white"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Carousel Hero Section -->
+@* <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+    <!-- Indicators -->
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div> *@
+
+<!-- Carousel Items -->
+<section class="wrap section-home-banner" style="margin-top: 20px;">
+    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+        <!-- Indicators -->
+        <!-- Carousel Items -->
+        <section class="wrap section-home-banner">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-2 col-trend">
+                        <div class="box link-trend" style="height: 300px;">
+                            <!-- Header -->
+                            <div class="box-header flex">
+                                <p class="box-title flex">
+                                    <i class="fab fa-hotjar"></i>&nbsp;Xu hướng dịch vụ
+                                </p>
+                            </div>
+
+                            <!-- Body -->
+                            <div class="box-body">
+                                <ul class="link-trend-list">
+                                    <!-- Item 1 -->
+                                    <li class="link-trend-item flex">
+                                        <a href="">
+                                            <span class="title">Bảo hành VIP 12 Tháng</span>
+                                            <span class="desc">Quà tặng lên đến 3 Triệu</span>
+                                        </a>
+                                    </li>
+                                    <!-- Item 2 -->
+                                    <li class="link-trend-item flex">
+                                        <a href="">
+                                            <span class="title">BH cơ bản 12 Tháng</span>
+                                            <span class="desc">BH 12 Tháng 1 đổi 1 31 Ngày</span>
+                                        </a>
+                                    </li>
+                                    <!-- Item 3 -->
+                                    <li class="link-trend-item flex">
+                                        <a href="">
+                                            <span class="title">Thu cũ đổi mới TRADE-IN</span>
+                                            <span class="desc">Thu điện thoại giá cao</span>
+                                        </a>
+                                    </li>
+                                    <!-- Item 4 -->
+                                    <li class="link-trend-item flex">
+                                        <a href="">
+                                            <span class="title">Trả góp 0% Lãi suất</span>
+                                            <span class="desc">Góp nhanh qua thẻ Tín Dụng</span>
+                                        </a>
+                                    </li>
+                                    <!-- Item 5 -->
+                                    <li class="link-trend-item flex">
+                                        <a href="">
+                                            <span class="title">Trả góp LS thấp</span>
+                                            <span class="desc">Góp qua CCCD, duyệt 15 phút</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-7 col-left">
+                        <!-- Bootstrap Carousel -->
+                        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <!-- Slide 1 -->
+                                <div class="carousel-item active">
+                                    <img class="img-fluid" src="~/images/banner-giamgiaj.png" alt="Banner 1">
+                                </div>
+                                <!-- Slide 2 -->
+                                <div class="carousel-item">
+                                    <img class="img-fluid" src="~/images/banner-iphone-11-31900j.png" alt="Banner 2">
+                                </div>
+                                <!-- Slide 3 -->
+                                <div class="carousel-item">
+                                    <img class="img-fluid" src="~/images/banner-iphone14-FlashSale.png" alt="Banner 3">
+                                </div>
+                            </div>
+
+                            <!-- Carousel Controls -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" style="background: transparent; border: none;margin-left:-40px; ">
+                                <span class="carousel-control-prev-icon" aria-hidden="true" "></span>
+                            </button>
+
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" style="background: transparent; border: none;margin-right:-40px;">
+                                <span class="carousel-control-next-icon" aria-hidden="true" "></span>
+                            </button>
+
+                            <div class="carousel-indicators" style="display: flex; justify-content: center; gap: 10px;">
+                                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"
+                                        style="width: 10px; height: 10px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.6); border: none;"></button>
+                                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1" aria-label="Slide 2"
+                                        style="width: 10px; height: 10px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.6); border: none;"></button>
+                                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2" aria-label="Slide 3"
+                                        style="width: 10px; height: 10px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.6); border: none;"></button>
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-lg-3 col-right">
+                        <img class="img-fluid mb-3 rounded" src="~/images/banner-giamgiaj.png" alt="">
+                        <img class="img-fluid rounded" src="~/images/banner-baohanh.png" alt="">
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <section class="wrap">
+            <div class="container">
+                <section class="wrap section-category section-padding categorypk">
+                    <div class="container">
+                        <div class="row justify-content-center" style="height: 125px;">
+                            <!-- Mục 1 -->
+                            <div class="col-1 text-center">
+                                <a class="category-item" href="/iphone-15-pro-max.html" title="iPhone 15 Pro Max">
+                                    <img class="img-fluid" src="~/images/iphone-15-pro-max_3.png" alt="iPhone 15 Pro Max">
+                                    <span class="title">IPhone</span>
+                                </a>
+                            </div>
+
+                            <!-- Mục 2 -->
+                            <div class="col-1 text-center">
+                                <a class="category-item" href="/ipad-23p.html" title="iPad">
+                                    <img class="img-fluid" src="~/images/ipad-pro-m4-11-inch_5_.png" alt="iPad">
+                                    <span class="title">iPad</span>
+                                </a>
+                            </div>
+
+                            <!-- Mục 3 -->
+                            <div class="col-1 text-center">
+                                <a class="category-item" href="/airpods-22p.html" title="Apple Watch">
+                                    <img class="img-fluid" src="~/images/2882af6e-143d-43f4-a395-6688a82e8f13_apple-watch.png" alt="Apple Watch">
+                                    <span class="title">Apple Watch</span>
+                                </a>
+                            </div>
+
+                            <!-- Mục 4 -->
+                            <div class="col-1 text-center">
+                                <a class="category-item" href="/airpods-22p.html" title="AirPods">
+                                    <img class="img-fluid" src="~/images/apple-airpods-max-3_1.png" alt="AirPods">
+                                    <span class="title">AirPods</span>
+                                </a>
+                            </div>
+
+                            <!-- Mục 5 -->
+                            <div class="col-1 text-center">
+                                <a class="category-item" href="/macbook-134p.html" title="MacBook">
+                                    <img class="img-fluid" src="~/images/macbook-pro-14-inch-m3-2023_1_.png" alt="MacBook">
+                                    <span class="title">MacBook</span>
+                                </a>
+                            </div>
+
+                            <!-- Mục 6 -->
+                            <div class="col-1 text-center">
+                                <a class="category-item" href="/phu-kien-13p.html" title="Phụ kiện">
+                                    <img class="img-fluid" src="~/images/group_563_28__1.png" alt="Phụ kiện">
+                                    <span class="title">Phụ kiện</span>
+                                </a>
+                            </div>
+
+                            <!-- Mục 7 -->
+                            <div class="col-1 text-center">
+                                <a class="category-item" href="/item-7.html" title="Item 7">
+                                    <img class="img-fluid" src="~/images/cammera.png" alt="Item 7">
+                                    <span class="title">Camera</span>
+                                </a>
+                            </div>
+
+                            <!-- Mục 8 -->
+                            <div class="col-1 text-center">
+                                <a class="category-item" href="/item-8.html" title="Item 8">
+                                    <img class="img-fluid" src="~/images/mayhutbui.png" alt="Item 8">
+                                    <span class="title">Đồ gia dụng</span>
+                                </a>
+                            </div>
+
+                            <!-- Mục 9 -->
+                            <div class="col-1 text-center">
+                                <a class="category-item" href="/item-9.html" title="Item 9">
+                                    <img class="img-fluid" src="~/images/thucu.png" alt="Item 9">
+                                    <span class="title">Thu cũ đổi mới</span>
+                                </a>
+                            </div>
+
+                            <!-- Mục 10 -->
+                            <div class="col-1 text-center">
+                                <a class="category-item" href="/item-10.html" title="Item 10">
+                                    <img class="img-fluid" src="~/images/tivi-coocaa-4k-50-inch-50y73_2__1.png" alt="Item 10">
+                                    <span class="title">TIVI</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                @* mục banner hàng đầu *@
+                <div class="box-banner">
+                    <div class="row">
+                        <div class="col-md-6 col-md-3 ">
+                            <img class="img-fluid" src="~/images/apple-iphone-11-pro.png" alt="">
+                        </div>
+                        <div class="col-md-6 col-md-3 ">
+                            <img class="img-fluid" src="~/images/banner-iphone-13-mini.png" alt="">
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                <section class="featured-products-section">
+                    <div class="container">
+                        <!-- Section Title -->
+                        <div class="section-header">
+                            <h3 class="section-title">
+                                <i class="fab fa-apple"></i> Iphone Chính Hãng
+                            </h3>
+                            <div class="section-tabs">
+                                <button class="tab-btn">Iphone 16 Pro Max</button>
+                                <button class="tab-btn">Iphone 16 Pro</button>
+                                <button class="tab-btn">Iphone 16 Plus</button>
+                                <button class="tab-btn">Iphone 15 Pro Max</button>
+                                <button class="tab-btn">Iphone 15 Pro</button>
+                                <button class="tab-btn">Iphone 15 Plus</button>
+                                <button class="tab-btn">Iphone 15</button>
+                            </div>
+                        </div>
+
+                        <!-- Carousel: Featured Products (4 products per slide) -->
+                        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                @foreach (var (productGroup, index) in Model.Where(p => p.SupplierProduct.Category.Name == "Iphone").Chunk(4).Select((value, i) => (value, i)))
+                                {
+                                    <div class="carousel-item @(index == 0 ? "active" : "")">
+                                        <div class="row">
+                                            @foreach (var product in productGroup)
+                                            {
+                                                <!-- Single Product -->
+                                                <div class="col-lg-3 col-md-6 mb-4">
+                                                    <a href="@Url.Action("Display", "Inventory", new { inventoryId = product.Id })">
+                                                        <div class="product-card">
+                                                            <div class="product-badge discount">Giảm 60,000 đ</div>
+
+                                                            @if (product.SupplierProduct?.ProductImages?.Any() == true)
+                                                            {
+                                                                <img id="mainImage" src="@product.SupplierProduct.ProductImages.First().Url" class="img-fluid" alt="Hình ảnh sản phẩm chính" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <p>Không có hình ảnh sản phẩm chính</p>
+                                                            }
+
+                                                            <div class="product-details">
+                                                                <span class="badge hot">Hàng Hot</span>
+                                                                <h5 class="product-title"> @product.SupplierProduct?.ProductName</h5>
+                                                                <div class="product-rating">
+                                                                    <span class="stars">★★★★★</span>
+                                                                    <span class="reviews">(10 đánh giá)</span>
+                                                                </div>
+                                                                <p class="product-price">@String.Format("{0:#,##0}", product.SellingPrice) đ<span class="old-price">550,000 đ</span></p>
+                                                                <div class="product-info">
+                                                                    <span>Bảo hành: 12 tháng</span>
+                                                                    <span>Cam kết 100% chính hãng</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="next" style="background: transparent; border: none;margin-left:-108px;">
+                                <span class="carousel-control-prev-icon" aria-hidden="true" "=" "></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next" style="background: transparent; border: none;margin-right:-109px;">
+                                <span class="carousel-control-next-icon" aria-hidden="true" "=" "></span>
+                            </button>
+                        </div>
+
+
+
+
+                    </div>
+                </section>
+
+
+
+                <section class="featured-products-section">
+                    <div class="container">
+                        <!-- Section Title -->
+                        <div class="section-header">
+                            <h3 class="section-title">
+                                <i class="fa-solid fa-tablet-screen-button"></i> IPad
+                            </h3>
+                            <div class="section-tabs">
+                                <button class="tab-btn">iPad Air 6 </button>
+                                <button class="tab-btn">iPad Air 6 13-inch</button>
+                                <button class="tab-btn">iPad Pro</button>
+                                <button class="tab-btn">iPad Pro 13 </button>
+
+                            </div>
+                        </div>
+                        <!-- Product List -->
+                        <div id="IPadCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                @foreach (var (productGroup, index) in Model.Where(p => p.SupplierProduct.Category.Name == "IPad").Chunk(4).Select((value, i) => (value, i)))
+                                {
+                                    <div class="carousel-item @(index == 0 ? "active" : "")">
+                                        <div class="row">
+                                            @foreach (var product in productGroup)
+                                            {
+                                                <!-- Single Product -->
+                                                <div class="col-lg-3 col-md-6 mb-4">
+                                                    <a href="@Url.Action("Display", "Inventory", new { inventoryId = product.Id })">
+                                                        <div class="product-card">
+                                                            <div class="product-badge discount">Giảm 60,000 đ</div>
+
+                                                            @if (product.SupplierProduct?.ProductImages?.Any() == true)
+                                                            {
+                                                                <img id="mainImage" src="@product.SupplierProduct.ProductImages.First().Url" class="img-fluid" alt="Hình ảnh sản phẩm chính" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <p>Không có hình ảnh sản phẩm chính</p>
+                                                            }
+
+                                                            <div class="product-details">
+                                                                <span class="badge hot">Hàng Hot</span>
+                                                                <h5 class="product-title"> @product.SupplierProduct?.ProductName</h5>
+                                                                <div class="product-rating">
+                                                                    <span class="stars">★★★★★</span>
+                                                                    <span class="reviews">(10 đánh giá)</span>
+                                                                </div>
+                                                                <p class="product-price">@String.Format("{0:#,##0}", product.SellingPrice) đ<span class="old-price">550,000 đ</span></p>
+                                                                <div class="product-info">
+                                                                    <span>Bảo hành: 12 tháng</span>
+                                                                    <span>Cam kết 100% chính hãng</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#IPadCarousel" data-bs-slide="next" style="background: transparent; border: none;margin-left:-108px;">
+                                <span class="carousel-control-prev-icon" aria-hidden="true" "=" "></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#IPadCarousel" data-bs-slide="next" style="background: transparent; border: none;margin-right:-109px;">
+                                <span class="carousel-control-next-icon" aria-hidden="true" "=" "></span>
+                            </button>
+                        </div>
+
+
+                    </div>
+                </section>
+                <div class="box-banner">
+                    <div class="row">
+                        <div class="col-md-6 col-md-1 " style="padding-right: 6px;">
+                            <img class="img-fluid" src="~/images/apple-iphone-11-pro.png" alt="">
+                        </div>
+                        <div class="col-md-6 col-md-1 " style="padding-left: 6px;">
+                            <img class="img-fluid" src="~/images/banner-iphone-13-mini.png" alt="">
+                        </div>
+
+                    </div>
+                </div>
+                <section class="featured-products-section">
+                    <div class="container">
+                        <!-- Section Title -->
+                        <div class="section-header">
+                            <h3 class="section-title">
+                                <i class="fas fa-headphones-alt"></i>Airpod chính hãng
+                            </h3>
+                            <div class="section-tabs">
+                                <button class="tab-btn">Phụ kiện APPLE</button>
+                                <button class="tab-btn">Phụ kiện PISEN (Apple)</button>
+                                <button class="tab-btn">Tai nghe</button>
+                                <button class="tab-btn">Cốc sạc</button>
+                                <button class="tab-btn">Cáp sạc</button>
+                                <button class="tab-btn">Đồ chơi công nghệ</button>
+                                <button class="tab-btn">Sạc dự phòng</button>
+                            </div>
+                        </div>
+                        <!-- Product List -->
+                        <div id="AirPodsCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                @foreach (var (productGroup, index) in Model.Where(p => p.SupplierProduct.Category.Name == "AirPods").Chunk(4).Select((value, i) => (value, i)))
+                                {
+                                    <div class="carousel-item @(index == 0 ? "active" : "")">
+                                        <div class="row">
+                                            @foreach (var product in productGroup)
+                                            {
+                                                <!-- Single Product -->
+                                                <div class="col-lg-3 col-md-6 mb-4">
+                                                    <a href="@Url.Action("Display", "Inventory", new { inventoryId = product.Id })">
+                                                        <div class="product-card">
+                                                            <div class="product-badge discount">Giảm 60,000 đ</div>
+
+                                                            @if (product.SupplierProduct?.ProductImages?.Any() == true)
+                                                            {
+                                                                <img id="mainImage" src="@product.SupplierProduct.ProductImages.First().Url" class="img-fluid" alt="Hình ảnh sản phẩm chính" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <p>Không có hình ảnh sản phẩm chính</p>
+                                                            }
+
+                                                            <div class="product-details">
+                                                                <span class="badge hot">Hàng Hot</span>
+                                                                <h5 class="product-title"> @product.SupplierProduct?.ProductName</h5>
+                                                                <div class="product-rating">
+                                                                    <span class="stars">★★★★★</span>
+                                                                    <span class="reviews">(10 đánh giá)</span>
+                                                                </div>
+                                                                <p class="product-price">@String.Format("{0:#,##0}", product.SellingPrice) đ<span class="old-price">550,000 đ</span></p>
+                                                                <div class="product-info">
+                                                                    <span>Bảo hành: 12 tháng</span>
+                                                                    <span>Cam kết 100% chính hãng</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#AirPodsCarousel" data-bs-slide="next" style="background: transparent; border: none;margin-left:-108px;">
+                                <span class="carousel-control-prev-icon" aria-hidden="true" "=" "></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#AirPodsCarousel" data-bs-slide="next" style="background: transparent; border: none;margin-right:-109px;">
+                                <span class="carousel-control-next-icon" aria-hidden="true" "=" "></span>
+                            </button>
+                        </div>
+
+                    </div>
+                </section>
+                <div class="box-banner">
+                    <div class="row">
+                        <div class="col-md-6 col-md-1 " style="padding-right: 6px;">
+                            <img class="img-fluid" src="~/images/banner-xanh-15.png" alt="">
+                        </div>
+                        <div class="col-md-6 col-md-1 " style="padding-left: 6px;">
+                            <img class="img-fluid" src="~/images/banner-iphone-12.png" alt="">
+                        </div>
+
+                    </div>
+                </div>
+                <section class="featured-products-section">
+                    <div class="container">
+                        <!-- Section Title -->
+                        <div class="section-header">
+                            <h3 class="section-title">
+                                <i class="fas fa-laptop"></i> Macbook
+                            </h3>
+                            <div class="section-tabs">
+                                <button class="tab-btn">MACBOOK AIR</button>
+                                <button class="tab-btn">MACBOOK PRO</button>
+                                <button class="tab-btn">MACBOOK MINI</button>
+                                <button class="tab-btn">MACBOOK STUDIO</button>
+                                <button class="tab-btn">IMAC</button>
+                            </div>
+                        </div>
+
+                        <!-- Product List -->
+                        <div id="MacBookCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                @foreach (var (productGroup, index) in Model.Where(p => p.SupplierProduct.Category.Name == "MacBook").Chunk(4).Select((value, i) => (value, i)))
+                                {
+                                    <div class="carousel-item @(index == 0 ? "active" : "")">
+                                        <div class="row">
+                                            @foreach (var product in productGroup)
+                                            {
+                                                <!-- Single Product -->
+                                                <div class="col-lg-3 col-md-6 mb-4">
+                                                    <a href="@Url.Action("Display", "Inventory", new { inventoryId = product.Id })">
+                                                        <div class="product-card">
+                                                            <div class="product-badge discount">Giảm 60,000 đ</div>
+
+                                                            @if (product.SupplierProduct?.ProductImages?.Any() == true)
+                                                            {
+                                                                <img id="mainImage" src="@product.SupplierProduct.ProductImages.First().Url" class="img-fluid" alt="Hình ảnh sản phẩm chính" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <p>Không có hình ảnh sản phẩm chính</p>
+                                                            }
+
+                                                            <div class="product-details">
+                                                                <span class="badge hot">Hàng Hot</span>
+                                                                <h5 class="product-title"> @product.SupplierProduct?.ProductName</h5>
+                                                                <div class="product-rating">
+                                                                    <span class="stars">★★★★★</span>
+                                                                    <span class="reviews">(10 đánh giá)</span>
+                                                                </div>
+                                                                <p class="product-price">@String.Format("{0:#,##0}", product.SellingPrice) đ<span class="old-price">550,000 đ</span></p>
+                                                                <div class="product-info">
+                                                                    <span>Bảo hành: 12 tháng</span>
+                                                                    <span>Cam kết 100% chính hãng</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#MacBookCarousel" data-bs-slide="next" style="background: transparent; border: none;margin-left:-108px;">
+                                <span class="carousel-control-prev-icon" aria-hidden="true" "=" "></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#MacBookCarousel" data-bs-slide="next" style="background: transparent; border: none;margin-right:-109px;">
+                                <span class="carousel-control-next-icon" aria-hidden="true" "=" "></span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+                <div class="box-banner">
+                    <div class="row">
+                        <div class="col-md-6 col-md-1 " style="padding-right: 6px;">
+                            <img class="img-fluid" src="~/images/banner-trai-apple-watch.png" alt="">
+                        </div>
+                        <div class="col-md-6 col-md-1 " style="padding-left: 6px;">
+                            <img class="img-fluid" src="~/images/banner-phai-apple-watch.png" alt="">
+                        </div>
+
+                    </div>
+                </div>
+                <section class="featured-products-section">
+                    <div class="container">
+                        <!-- Section Title -->
+                        <div class="section-header">
+                            <h3 class="section-title">
+                                <i class="fas fa-stopwatch"></i> Apple Watch
+                            </h3>
+                            <div class="section-tabs">
+                                <button class="tab-btn">Phụ kiện APPLE</button>
+                                <button class="tab-btn">Phụ kiện PISEN (Apple)</button>
+                                <button class="tab-btn">Tai nghe</button>
+                                <button class="tab-btn">Cốc sạc</button>
+                                <button class="tab-btn">Cáp sạc</button>
+                                <button class="tab-btn">Đồ chơi công nghệ</button>
+                                <button class="tab-btn">Sạc dự phòng</button>
+                            </div>
+                        </div>
+                        <!-- Product List -->
+                        <div id="AppleWatchCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                @foreach (var (productGroup, index) in Model.Where(p => p.SupplierProduct.Category.Name == "Apple Watch").Chunk(4).Select((value, i) => (value, i)))
+                                {
+                                    <div class="carousel-item @(index == 0 ? "active" : "")">
+                                        <div class="row">
+                                            @foreach (var product in productGroup)
+                                            {
+                                                <!-- Single Product -->
+                                                <div class="col-lg-3 col-md-6 mb-4">
+                                                    <a href="@Url.Action("Display", "Inventory", new { inventoryId = product.Id })">
+                                                        <div class="product-card">
+                                                            <div class="product-badge discount">Giảm 60,000 đ</div>
+
+                                                            @if (product.SupplierProduct?.ProductImages?.Any() == true)
+                                                            {
+                                                                <img id="mainImage" src="@product.SupplierProduct.ProductImages.First().Url" class="img-fluid" alt="Hình ảnh sản phẩm chính" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <p>Không có hình ảnh sản phẩm chính</p>
+                                                            }
+
+                                                            <div class="product-details">
+                                                                <span class="badge hot">Hàng Hot</span>
+                                                                <h5 class="product-title"> @product.SupplierProduct?.ProductName</h5>
+                                                                <div class="product-rating">
+                                                                    <span class="stars">★★★★★</span>
+                                                                    <span class="reviews">(10 đánh giá)</span>
+                                                                </div>
+                                                                <p class="product-price">@String.Format("{0:#,##0}", product.SellingPrice) đ<span class="old-price">550,000 đ</span></p>
+                                                                <div class="product-info">
+                                                                    <span>Bảo hành: 12 tháng</span>
+                                                                    <span>Cam kết 100% chính hãng</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#AppleWatchCarousel" data-bs-slide="next" style="background: transparent; border: none;margin-left:-108px;">
+                                <span class="carousel-control-prev-icon" aria-hidden="true" "=" "></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#AppleWatchCarousel" data-bs-slide="next" style="background: transparent; border: none;margin-right:-109px;">
+                                <span class="carousel-control-next-icon" aria-hidden="true" "=" "></span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+
+
+
+                <div class="box-banner">
+                    <div class="row">
+                        <div class="col-md-12 col-md-1 ">
+                            <img class="img-fluid" src="~/images/banner-BaoHanhSo1VN.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Carousel Controls -->
+        @*         <div class="carousel-item active">
+        <div class="container">
+        <div class="row p-5">
+        <div class="col-lg-6 mb-0 d-flex align-items-center">
+        <div class="text-align-left align-self-center">
+        <h1 class="h1 text-success"><b>Iphone 15 Pro Max</b></h1>
+        <h3 class="h2">Titan Đen, Titan Trắng, Titan Xanh, Titan Tự Nhiên</h3>
+        <p>Sở hữu thiết kế Titan mỏng nhẹ và mạnh mẽ cùng cạnh viền mới...</p>
+        </div>
+        </div>
+        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+        <img class="img-fluid" src="~/images/banner-giamgiaj.png" alt="">
+        <img class="img-fluid" src="~/images/banner-giamgiaj.png" alt="">
+        </div>
+        </div>
+        </div>
+        </div> *@
+        <!-- More Carousel Items Here -->
+        @*     </div>
+        <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="prev">
+        <i class="fas fa-chevron-left"></i>
+        </a>
+        <a class="carousel-control-next text-decoration-none w-auto pe-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="next">
+        <i class="fas fa-chevron-right"></i>
+        </a>
+        </div> *@
+
+        <!-- Featured Products Section -->
+        @* section class="container py-5">
+        <h1 class="text-center">Sản phẩm nổi bật</h1>
+        <div class="row">
+        <div class="col-12 col-md-4 p-5 mt-3">
+        <a href="~/Product/Index"><img src="~/assets/img/14promax.png" class="rounded-circle img-fluid border"></a>
+        <h5 class="text-center mt-3 mb-3">Iphone 15 Pro Max</h5>
+        <p class="text-center"><a href="~/Product/Index" class="btn btn-success">Mua ngay</a></p>
+        </div>
+        <!-- More Products Here -->
+        </div>
+        </section> *@
+
+        <!-- Video Section -->
+        @* <section class="container py-5">
+        <h1 style="text-align:center">VIDEO</h1>
+        <div class="d-flex justify-content-center">
+        <div class="ratio ratio-16x9" style="width: 854px; height: 480px;">
+        <iframe src="https://www.youtube.com/embed/OQcEQpiQJE4?si=WQsHsBMc6MC5npLe" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+        </div>
+        </section> *@
+
+        <!-- Best Sellers Section -->
+        @* <section class="bg-light">
+        <div class="container py-5">
+        <h1 class="text-center">Được mua nhiều</h1>
+        <div class="row">
+        <div class="col-12 col-md-4 mb-4">
+        <div class="card h-100 card-mua">
+        <a href="~/Product/Index"><img src="~/assets/img/13promax.png" class="card-img-top" alt="..."></a>
+        <div class="card-body text-center">
+        <ul class="list-unstyled d-flex justify-content-between">
+        <li class="text-right">15,750,000 VNĐ</li>
+        </ul>
+        <a href="~/Product/Index" class="h2 text-decoration-none text-dark">Iphone 13 Pro Max</a>
+        <p>Sản phẩm với hơn 1053 lượt mua</p>
+        </div>
+        </div>
+        </div>
+        <!-- More Best Seller Products Here -->
+        </div>
+        </div>
+        </section> *@
+
+        @* @section Scripts {
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+        $(document).ready(function () {
+        setTimeout(function () {
+        $('#success-alert').fadeOut('slow');
+        }, 3000);
+        });
+        </script>
+        }
+        *@
+
+

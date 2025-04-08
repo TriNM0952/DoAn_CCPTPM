@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Category>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="~/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .text-bl {
+            color: black !important;
+        }
+    </style>
+</head>
+
+<style>
+</style>
+
+<nav class="navbar navbar-expand navbar-light topbar mb-4 static-top shadow text-bl" style="background-color: #ffffff; border-bottom: 1px solid #e3e6f0; padding: 10px 15px; border-radius: 10px; width: 140px;">
+    <span style="color: black; font-weight: bold; margin-right: 20px;">Lọc theo</span>
+    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+        <i class="fa fa-bars"></i>
+    </button>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown no-arrow mx-1">
+            <a href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa-solid fa-caret-down"></i>
+            </a>
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                <h6 class="dropdown-header">Danh sách</h6>
+                @using (Html.BeginForm("Index", "Product", FormMethod.Get))
+                {
+                    @foreach (var item in Model)
+                    {
+                        <button type="submit" name="Category" value="@item.Id" class="dropdown-item d-flex align-items-center">
+                            <div class="mr-3">
+                                <i class="fa-solid fa-caret-right"></i>
+                            </div>
+                            <div style="margin: 0 20px;">
+                                <div class="small">@item.Name</div>
+                            </div>
+                        </button>
+                    }
+                }
+            </div>
+        </li>
+    </ul>
+</nav>
+
+<script src="~/admin/vendor/jquery/jquery.min.js"></script>
+<script src="~/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="~/admin/js/sb-admin-2.min.js"></script>
+<script src="~/admin/vendor/chart.js/Chart.min.js"></script>
+<script src="~/admin/js/demo/chart-area-demo.js"></script>
+<script src="~/admin/js/demo/chart-pie-demo.js"></script>

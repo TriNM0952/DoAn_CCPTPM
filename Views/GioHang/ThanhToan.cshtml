@@ -1,0 +1,114 @@
+﻿@model GioHangViewModel
+
+
+@{
+    var totalPrice = ViewBag.TotalPrice ?? 0;
+    var discountAmount = ViewBag.DiscountAmount ?? 0;
+    var discountedPrice = ViewBag.DiscountedPrice ?? 0;
+    
+}
+
+<h1 class="text-center">Chi tiết thanh toán</h1>
+
+<div class="container">
+    <form asp-controller="Checkout" asp-action="ProcessPayment" method="post">
+        @Html.AntiForgeryToken()
+
+        <!-- Thông tin khách hàng -->
+        <div class="form-group">
+            <label asp-for="HoaDon.CustomerName">Tên khách hàng</label>
+            <input asp-for="HoaDon.CustomerName" class="form-control" value="@ViewBag.Username" placeholder="Nhập tên khách hàng" required />
+            <span asp-validation-for="HoaDon.CustomerName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="HoaDon.PhoneNumber">Số điện thoại</label>
+            <input asp-for="HoaDon.PhoneNumber" class="form-control" value="@ViewBag.SDT" placeholder="Nhập số điện thoại" required />
+            <span asp-validation-for="HoaDon.PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="HoaDon.Address">Địa chỉ</label>
+            <input asp-for="HoaDon.Address" class="form-control" value="@ViewBag.Address" placeholder="Nhập địa chỉ" required />
+            <span asp-validation-for="HoaDon.Address" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Gmail</label>
+            <input class="form-control" value="@ViewBag.UserEmail" placeholder="Mail" required />
+        </div>
+
+
+        <div class="form-group">
+            <label asp-for="HoaDon.ShippingAddress">Địa chỉ giao hàng</label>
+            <input asp-for="HoaDon.ShippingAddress" class="form-control" placeholder="Nhập địa chỉ giao hàng" required />
+            <span asp-validation-for="HoaDon.ShippingAddress" class="text-danger"></span>
+        </div>
+
+        <!-- Phương thức thanh toán -->
+        <div class="form-group">
+            <label asp-for="HoaDon.PaymentMethod">Phương thức thanh toán</label>
+            <select asp-for="HoaDon.PaymentMethod" class="form-control" required>
+              
+                <option value="CashOnDelivery">Thanh toán khi nhận hàng</option>
+                <option value="BankTransfer">Chuyển khoản ngân hàng</option>
+                
+            </select>
+            <span asp-validation-for="HoaDon.PaymentMethod" class="text-danger"></span>
+        </div>
+
+        <!-- Phí vận chuyển và thuế -->
+        <div class="form-group">
+            <label asp-for="HoaDon.ShippingCost">Phí vận chuyển</label>
+            <input asp-for="HoaDon.ShippingCost" class="form-control" value="30000" readonly />
+            <span asp-validation-for="HoaDon.ShippingCost" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="HoaDon.TaxAmount">Thuế (nếu có)</label>
+            <input asp-for="HoaDon.TaxAmount" class="form-control " placeholder="Nhập tiền thuế" oninput="calculateTotal()" />
+            <span asp-validation-for="HoaDon.TaxAmount" class="text-danger"></span>
+        </div>
+
+        <!-- Tổng tiền -->
+        <div class="form-group">
+            <span id="total-price" class="lead fw-normal" style="color:red;">
+                @String.Format("{0:#,##0}", @discountedPrice) VNĐ
+            </span>
+        </div>
+
+        <!-- Ghi chú -->
+        <div class="form-group">
+            <label asp-for="HoaDon.Note">Ghi chú</label>
+            <textarea asp-for="HoaDon.Note" class="form-control" placeholder="Thêm ghi chú nếu có"></textarea>
+            <span asp-validation-for="HoaDon.Note" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-custom">Xác nhận</button>
+        <a asp-action="Index" class="btn btn-secondary">Trở về</a>
+    </form>
+
+</div>
+
+
+
+
+@section Scripts {
+    <script>
+        function calculateTotal() {
+            const shippingCost = parseFloat(document.querySelector('[name="HoaDon.ShippingCost"]').value) || 0;
+            const taxAmount = parseFloat(document.querySelector('[name="HoaDon.TaxAmount"]').value) || 0;
+
+            const cartTotal = @((Model.DsGioHang != null)
+            ? Model.DsGioHang.Sum(item => item.Quantity * (item.Inventory?.SellingPrice ?? 0))
+            : 0);
+
+            const finalTotal = cartTotal + shippingCost + taxAmount;
+            document.getElementById("totalAmount").innerText = `${finalTotal.toLocaleString()} VNĐ`;
+            document.getElementById("TotalInput").value = finalTotal; // Update hidden input field
+        }
+
+        document.querySelector('[name="HoaDon.TaxAmount"]').addEventListener("input", calculateTotal);
+        window.onload = calculateTotal; // Calculate total on page load
+    </script>
+}
