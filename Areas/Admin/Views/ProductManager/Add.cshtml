@@ -1,0 +1,56 @@
+﻿@model Lab03.Models.Inventory
+
+@{
+    ViewData["Title"] = "Thêm sản phẩm mới";
+}
+
+<h1>Thêm sản phẩm mới</h1>
+
+<form asp-action="Add" method="post">
+    <div class="form-group">
+        <label for="CategoryId">Loại sản phẩm</label>
+        <select id="CategoryId" name="CategoryId" class="form-control" onchange="loadInventory(this.value)">
+            <option value="">Chọn loại sản phẩm</option>
+            @foreach (var category in ViewBag.Categories)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="InventoryId">Chọn sản phẩm từ kho</label>
+        <select id="InventoryId" name="InventoryId" class="form-control">
+            <option value="">Chọn sản phẩm</option>
+            <!-- Các sản phẩm sẽ được thêm vào đây thông qua AJAX -->
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="Price">Giá</label>
+        <input type="text" class="form-control" name="Price" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Mô tả</label>
+        <textarea class="form-control" name="Description" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+</form>
+
+<script>
+    function loadInventory(categoryId) {
+        if (categoryId) {
+            $.getJSON('/Admin/ProductManager/GetInventoryByCategory', { categoryId: categoryId }, function (data) {
+                var inventorySelect = $('#InventoryId');
+                inventorySelect.empty();
+                inventorySelect.append('<option value="">Chọn sản phẩm</option>');
+                $.each(data, function (index, item) {
+                    var sellingPrice = item.SellingPrice !== undefined ? item.SellingPrice.toFixed(2) : "N/A"; // Kiểm tra giá trị SellingPrice
+                    inventorySelect.append('<option value="' + item.Id + '">' + item.Name + ' - Số lượng: ' + item.Quantity + ' - Vị trí: ' + item.Location + ' - Giá: ' + sellingPrice + '</option>');
+                });
+            });
+        }
+    }
+</script>

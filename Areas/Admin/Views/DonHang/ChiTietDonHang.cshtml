@@ -1,0 +1,124 @@
+﻿@model Lab03.Models.HoaDon
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chi Tiết Đơn Hàng</title>
+    <link rel="stylesheet" href="~/vendors/typicons/typicons.css">
+    <link rel="stylesheet" href="~/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/css/vertical-layout-light/style.css">
+    <link rel="shortcut icon" href="~/images/favicon.png" />
+    <style>
+        .table th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .container h2, .container h3 {
+            color: #007bff;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #0056b3;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h2 class="mb-4">Chi tiết Đơn Hàng</h2>
+
+        <table class="table table-bordered">
+            <tr>
+                <th>Tên khách hàng:</th>
+                <td>@Model.CustomerName</td>
+            </tr>
+            <tr>
+                <th>Địa chỉ:</th>
+                <td>@Model.Address</td>
+            </tr>
+            <tr>
+                <th>Ngày mua:</th>
+                <td>@Model.OrderDate.ToString("dd/MM/yyyy")</td>
+            </tr>
+            <tr>
+                <th>Trạng thái đơn hàng:</th>
+                <td class="font-weight-bold">@Model.OrderStatus</td>
+            </tr>
+            <tr>
+                <th>Địa chỉ giao hàng:</th>
+                <td>@(string.IsNullOrEmpty(Model.ShippingAddress) ? "Mua trực tiếp" : Model.ShippingAddress)</td>
+            </tr>
+            <tr>
+                <th>Tổng cộng:</th>
+                <td>@string.Format("{0:#,##0}", Model.Total) VNĐ</td>
+            </tr>
+            <tr>
+                <th>Chú ý:</th>
+                <td>@Model.Note</td>
+            </tr>
+        </table>
+
+        <h3 class="mt-4 mb-3">Danh sách sản phẩm</h3>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Giá mỗi sản phẩm</th>
+                        <th>Tổng giá</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.ChiTietHoaDons != null && Model.ChiTietHoaDons.Any())
+                    {
+                        foreach (var item in Model.ChiTietHoaDons)
+                        {
+                            <tr>
+                                <td>@(item.Inventory?.SupplierProduct?.ProductName ?? "N/A")</td>
+                                <td>@item.Quantity</td>
+                                <td>@string.Format("{0:#,##0}", item.Inventory.SellingPrice) VNĐ</td>
+                                <td>@string.Format("{0:#,##0}", item.Inventory.SellingPrice * item.Quantity) VNĐ</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center">Không có sản phẩm nào trong đơn hàng này.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <a asp-action="Index" class="btn btn-primary mt-3">
+            <i class="typcn typcn-arrow-back-outline"></i> Quay lại danh sách
+        </a>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/js/off-canvas.js"></script>
+    <script src="~/js/hoverable-collapse.js"></script>
+    <script src="~/js/template.js"></script>
+</body>
+
+</html>

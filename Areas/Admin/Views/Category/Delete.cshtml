@@ -1,0 +1,9 @@
+﻿@model Lab03.Models.Category
+
+<h2>Delete Category</h2>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <p>Bạn có chắc chắn muốn xóa @Model.Name không?</p>
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>

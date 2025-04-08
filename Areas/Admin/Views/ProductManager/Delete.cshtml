@@ -1,0 +1,10 @@
+﻿@model Lab03.Models.Inventory
+
+<h2>Xóa sản phẩm</h2>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <p>Bạn có chắc chắn muốn xóa sản phẩm "<strong>@Model.SupplierProduct.ProductName</strong>"?</p>
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="Index" class="btn btn-primary">Hủy</a>
+</form>

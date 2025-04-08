@@ -1,0 +1,119 @@
+﻿@model IEnumerable<Lab03.Models.ApplicationUser>
+@{
+    var userRole = ViewData["UserRole"] as string;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Danh Sách Người Dùng</title>
+    <link rel="stylesheet" href="~/vendors/typicons/typicons.css">
+    <link rel="stylesheet" href="~/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/css/vertical-layout-light/style.css">
+    <style>
+        .table-container {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+            border-radius: 8px; /* Rounded corners */
+            overflow: hidden; /* For rounded corners to apply on shadow */
+            margin-top: 1.5rem;
+        }
+
+        .table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .container h2 {
+            color: #007bff;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            font-weight: bold;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+            .table-responsive th, .table-responsive td {
+                white-space: nowrap;
+            }
+
+            .table-responsive::-webkit-scrollbar {
+                height: 8px;
+            }
+
+            .table-responsive::-webkit-scrollbar-thumb {
+                background-color: #007bff;
+                border-radius: 4px;
+            }
+
+            .table-responsive::-webkit-scrollbar-track {
+                background-color: #f1f1f1;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h2 class="text-primary">Danh Sách Người Dùng</h2>
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>UserName</th>
+                            <th>Tên</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ</th>
+                            <th>Quyền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Select((value, index) => new { Value = value, Index = index + 1 }))
+                        {
+                            <tr>
+                                <td>@item.Index</td>
+                                <td>@item.Value.UserName</td>
+                                <td>@item.Value.Name</td>
+                                <td>@item.Value.Email</td>
+                                <td>@item.Value.PhoneNumber</td>
+                                <td>@item.Value.Address</td>
+                                <td>
+                                    @if (userRole == "Admin" || userRole == "Sales")
+                                    {
+                                        <span>@userRole</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Customer</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/js/off-canvas.js"></script>
+    <script src="~/js/hoverable-collapse.js"></script>
+    <script src="~/js/template.js"></script>
+    <script src="~/js/settings.js"></script>
+    <script src="~/js/todolist.js"></script>
+</body>
+</html>

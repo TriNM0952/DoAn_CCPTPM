@@ -1,0 +1,120 @@
+﻿@model Lab03.Models.SupplierProduct
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thêm sản phẩm</title>
+    <link rel="stylesheet" href="~/vendors/typicons/typicons.css">
+    <link rel="stylesheet" href="~/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/css/vertical-layout-light/style.css">
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h2>Thêm sản phẩm mới</h2>
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                </ul>
+            </div>
+        }
+
+        <form asp-action="AddProduct" method="post" enctype="multipart/form-data">
+            <!-- SupplierId -->
+            <input type="hidden" asp-for="SupplierId" />
+
+            <!-- ProductName -->
+            <div class="form-group">
+                <label asp-for="ProductName">Tên sản phẩm</label>
+                <input type="text" class="form-control" asp-for="ProductName" />
+                <span asp-validation-for="ProductName" class="text-danger"></span>
+            </div>
+
+            <!-- CategoryId -->
+            <div class="form-group">
+                <label asp-for="CategoryId">Danh mục sản phẩm</label>
+                <select class="form-control" asp-for="CategoryId" asp-items="@(new SelectList(ViewBag.Categories, "Value", "Text"))"></select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <!-- CostPrice -->
+            <div class="form-group">
+                <label asp-for="CostPrice">Giá nhập</label>
+                <input type="number" step="0.01" class="form-control" asp-for="CostPrice" />
+                <span asp-validation-for="CostPrice" class="text-danger"></span>
+            </div>
+
+            <!-- Quantity -->
+            <div class="form-group">
+                <label asp-for="Quantity">Số lượng</label>
+                <input type="number" class="form-control" asp-for="Quantity" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+
+            <!-- ImportDate -->
+            <div class="form-group">
+                <label asp-for="ImportDate">Ngày nhập hàng</label>
+                <input type="date" class="form-control" asp-for="ImportDate" />
+                <span asp-validation-for="ImportDate" class="text-danger"></span>
+            </div>
+
+            <!-- Status -->
+            <div class="form-group">
+                <label asp-for="Status">Trạng thái</label>
+                <select class="form-control" asp-for="Status">
+                    <option value="Chưa được xác nhận">Chưa được xác nhận</option>
+                    <option value="Đã xác nhận">Đã xác nhận</option>
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+                <label asp-for="Description">Mô tả</label>
+                <textarea class="form-control" asp-for="Description"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <!-- Images -->
+            <div class="form-group">
+                <label for="images">Hình ảnh</label>
+                <input type="file" id="images" name="ImageFiles" multiple class="form-control" />
+            </div>
+
+            <!-- Notes -->
+            <div class="form-group">
+                <label asp-for="Notes">Ghi chú</label>
+                <textarea class="form-control" asp-for="Notes"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+
+            <!-- Brand -->
+            <div class="form-group">
+                <label asp-for="Brand">Thương hiệu</label>
+                <input type="text" class="form-control" asp-for="Brand" />
+                <span asp-validation-for="Brand" class="text-danger"></span>
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+            <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+        </form>
+
+    </div>
+
+    <script src="~/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/js/off-canvas.js"></script>
+    <script src="~/js/hoverable-collapse.js"></script>
+    <script src="~/js/template.js"></script>
+</body>
+
+</html>

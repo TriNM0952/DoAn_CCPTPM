@@ -1,0 +1,15 @@
+﻿@model Lab03.Models.Discount
+
+<h2>Xóa Mã Giảm Giá</h2>
+
+<p>Bạn có chắc chắn muốn xóa mã giảm giá này không?</p>
+<div>
+    <h4>Mã: @Model.Code</h4>
+    <h4>Số Tiền Giảm: @string.Format("{0:#,##0} VNĐ", Model.DiscountAmount)</h4>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>

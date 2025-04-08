@@ -1,0 +1,690 @@
+﻿@model IEnumerable<Lab03.Models.Inventory>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quản Lý Sản Phẩm Đang Bán</title>
+    <link rel="stylesheet" href="~/vendors/typicons/typicons.css">
+    <link rel="stylesheet" href="~/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/css/vertical-layout-light/style.css">
+    <link rel="shortcut icon" href="~/images/favicon.png" />
+    <style>
+        /* Container styling */
+        .container {
+            margin-top: 20px;
+            padding: 0 20px;
+        }
+
+        /* Header styling */
+        h2.text-primary {
+            color: #0056b3;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Card container styling */
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        /* Inventory card styling */
+        .inventory-card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            background-color: #ffffff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 16px;
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+
+            .inventory-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            }
+
+            /* Inventory card content */
+            .inventory-card h5 {
+                color: #007bff;
+                font-size: 18px;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+
+            .inventory-card p {
+                font-size: 14px;
+                margin: 5px 0;
+            }
+
+            .inventory-card .info-label {
+                font-weight: bold;
+                color: #333;
+            }
+
+            .inventory-card .info-value {
+                color: #555;
+            }
+
+        /* Buttons */
+        .btn-warning, .btn-secondary {
+            margin-top: 10px;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+            .btn-warning:hover {
+                background-color: #ffae42;
+                transform: scale(1.05);
+            }
+
+            .btn-secondary:hover {
+                background-color: #6c757d;
+                transform: scale(1.05);
+            }
+
+        /* Modal content */
+        .modal-content {
+            border-radius: 10px;
+        }
+
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .modal-title {
+            font-size: 18px;
+        }
+
+        .modal-body label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+                transform: scale(1.05);
+            }
+
+
+
+        /* Toast container */
+        .toast-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            max-width: 300px;
+        }
+
+        .toast-custom {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+            .toast-custom.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        .dropdown-menu {
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .dropdown-item {
+            font-size: 14px;
+            color: #333;
+        }
+
+            .dropdown-item:hover {
+                background-color: #f1f1f1;
+                color: #007bff;
+            }
+
+        /* Sửa style cho các ảnh trong modal */
+        .rows {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 100%;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        /* Hiệu ứng hover cho các hình ảnh nhỏ */
+        .small-image {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .small-image:hover {
+                transform: scale(1.1);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                cursor: pointer;
+            }
+
+        .small-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .main-image {
+            max-width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* Modal body styling */
+        .modal-body {
+            padding: 30px;
+        }
+
+        /* Thông tin cấu hình sản phẩm */
+        .product-config {
+            margin-top: 20px;
+        }
+
+            .product-config h5 {
+                color: #0056b3;
+                font-weight: 600;
+                margin-bottom: 20px;
+            }
+
+            .product-config .list-group-item {
+                font-size: 14px;
+                padding: 15px;
+                border: 1px solid #ddd;
+                margin-bottom: 5px;
+                border-radius: 8px;
+                transition: background-color 0.3s ease;
+            }
+
+                .product-config .list-group-item:hover {
+                    background-color: #f1f1f1;
+                }
+
+        /* Cấu trúc list-group với 2 cột */
+        .list-group {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0;
+        }
+
+        /* Đảm bảo mỗi list-group-item chiếm 50% chiều rộng */
+        .list-group-item {
+            width: 50%;
+            box-sizing: border-box;
+        }
+
+        /* Thêm border cho các li trong cấu hình */
+        .list-group-item {
+            font-size: 14px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+            .list-group-item:hover {
+                background-color: #f1f1f1;
+            }
+
+
+        /* Thêm bóng đổ cho hình ảnh chính */
+        .img-thumbnail {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .img-thumbnail:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            }
+
+        /* Cải thiện phần Footer */
+        .modal-footer {
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+            .btn-secondary:hover {
+                background-color: #6c757d;
+                transform: scale(1.05);
+            }
+
+
+
+        .config{
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+    </style>
+
+
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="text-primary">Quản Lý Sản Phẩm Đang Bán</h2>
+
+        <!-- Toast Modal -->
+        <div class="toast-container">
+            <div id="successToast" class="toast-custom hidden">
+                <div class="toast-body">
+                    @TempData["SuccessMessage"]
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Hiệu ứng thông báo-->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <script>
+                // Hiển thị Toast khi có thông báo thành công
+                window.onload = function () {
+                    var successToast = new bootstrap.Toast(document.getElementById('successToast'), {
+                        delay: 2500 // Thời gian hiển thị (700ms = 3 giây)
+                    });
+                    successToast.show();
+                };
+
+            </script>
+        }
+
+      
+
+
+       
+
+
+        <!-- Sản phẩm -->
+        <div class="card-container">
+            @foreach (var item in Model)
+            {
+                <div class="inventory-card">
+                    <h5>@item.SupplierProduct.ProductName</h5>
+                    <p><span class="info-label">Số Lượng:</span> <span class="info-value">@item.Quantity</span></p>
+                    <p><span class="info-label">Giá Bán:</span> <span class="info-value">@string.Format("{0:#,##0} VNĐ", item.SellingPrice)</span></p>
+                    <p><span class="info-label">Vị Trí:</span> <span class="info-value">@item.Location</span></p>
+                    <p><span class="info-label">Ghi Chú:</span> <span class="info-value">@item.Notes</span></p>
+                    <!-- Nút Chi tiết -->
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#detailsModal-@item.Id">Chi tiết</button>
+
+
+                    <button class="btn btn-warning" data-toggle="modal" data-target="#editModal-@item.Id">Chỉnh sửa</button>
+                    <!-- Nút Trạng Thái -->
+                    <button class="btn btn-secondary" data-toggle="modal" data-target="#statusModal-@item.Id">Trạng thái</button>
+
+                </div>
+
+
+
+
+
+                <!-- Modal Chi tiết -->
+                <div class="modal fade" id="detailsModal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel-@item.Id" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="detailsModalLabel-@item.Id">
+                                    Chi tiết sản phẩm: @item.SupplierProduct.ProductName
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Modal Body -->
+                            <div class="modal-body">
+                                <div class="rows">
+                                    <div class="col-md-6">
+                                        @if (item.SupplierProduct?.ProductImages?.Any() == true)
+                                        {
+                                            <img id="mainImage-@item.Id" src="@item.SupplierProduct.ProductImages.First().Url" class="img-fluid rounded mb-3" alt="Hình ảnh sản phẩm chính" />
+                                        }
+                                        else
+                                        {
+                                            <p>Không có hình ảnh sản phẩm chính</p>
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- Hình ảnh bổ sung -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="d-flex justify-content-start">
+                                            @foreach (var image in item.SupplierProduct.ProductImages)
+                                            {
+                                                <div class="mr-3">
+                                                    <!-- Thêm lớp small-image và sự kiện onclick -->
+                                                    <img src="@image.Url" class="img-thumbnail small-image" alt="Hình ảnh sản phẩm bổ sung" onclick="changeMainImage('@item.Id', '@image.Url')" />
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+                                <hr />
+
+                                
+                                <!-- Thông tin cơ bản -->
+                                <h5>Mô tả</h5>
+                                <div class="row">
+                                    
+                                    <div class="col-md-6">
+                                        
+                                        <p><strong>Mã sản phẩm:</strong> @item.Id</p>
+                                        <p><strong>Tên sản phẩm:</strong> @item.SupplierProduct?.ProductName </p>
+                                        <p><strong>Thương hiệu:</strong> @item.SupplierProduct?.Brand </p>
+                                        <p><strong>Danh mục:</strong> @item.SupplierProduct?.Category?.Name </p>
+                                        <p><strong>Giá nhập:</strong> @string.Format("{0:#,##0} VNĐ", item.SupplierProduct?.CostPrice ?? 0)</p>
+                                        <p><strong>Giá bán:</strong> @String.Format("{0:N0} VNĐ", item.SellingPrice)</p>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Số lượng trong kho:</strong> @item.Quantity</p>
+                                        <p><strong>Trạng thái:</strong> @item.Status</p>
+                                    </div>
+                                </div>
+
+                                <hr />
+
+                                <!-- Hiển thị cấu hình sản phẩm -->
+                                <div class="row">
+                                    <h5>Cấu hình chi tiết</h5>
+                                    <div class="col-md-12 config" >
+                                        
+                                        
+                                            @if (item.SupplierProduct.SupplierProductConfig != null)
+                                            {
+                                                // Danh sách các trường cần hiển thị cho mỗi CategoryId
+                                                var visibleFields = new List<string>();
+
+                                                // Giới hạn các trường cấu hình theo CategoryId
+                                                if (item.SupplierProduct.CategoryId == 1) // Ví dụ iPhone
+                                                {
+                                                    visibleFields = new List<string> { "Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CameraSau", "CameraTruoc", "Sim", "DungLuong" };
+                                                }
+                                                else if (item.SupplierProduct.CategoryId == 2) // Ví dụ AirPods
+                                                {
+                                                    visibleFields = new List<string> { "Color", "KetNoi", "ChatLuongAmThanh", "ThoiLuongPin" };
+                                                }
+                                                else if (item.SupplierProduct.CategoryId == 3) // Ví dụ Apple Watch
+                                                {
+                                                    visibleFields = new List<string> { "Color", "CamBien", "KhaNangChongNuoc", "KichThuoc" };
+                                                }
+                                                else if (item.SupplierProduct.CategoryId == 4) // iPad
+                                                {
+                                                    visibleFields = new List<string> { "Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CameraSau", "CameraTruoc", "Sim", "DungLuong" };
+                                                }
+                                                else if (item.SupplierProduct.CategoryId == 5) // MacBook
+                                                {
+                                                    visibleFields = new List<string> { "Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CardDoHoa", "CongKetNoi", "TrongLuong" };
+                                                }
+
+                                                // Lọc và hiển thị các trường cần thiết
+                                                @foreach (var property in item.SupplierProduct.SupplierProductConfig.GetType().GetProperties())
+                                                {
+                                                    var value = property.GetValue(item.SupplierProduct.SupplierProductConfig);
+                                                    if (visibleFields.Contains(property.Name)) // Kiểm tra nếu thuộc tính có trong danh sách cần hiển thị
+                                                    {
+                                                        <li class="list-group-item col-md-6">
+                                                            <strong>@property.Name:</strong> @(value != null ? value.ToString() : "Không có giá trị")
+                                                        </li>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <li class="list-group-item">Không có cấu hình chi tiết</li>
+                                            }
+                                        
+                                    </div>
+                                </div>
+
+
+
+
+
+
+                                <hr />
+
+                                <!-- Thông tin nhà cung cấp -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h5>Thông tin nhà cung cấp</h5>
+                                        <p><strong>Tên nhà cung cấp:</strong> @(item.SupplierProduct?.Supplier?.SupplierName ?? "Không có nhà cung cấp")</p>
+                                        <p><strong>Liên hệ:</strong> @(item.SupplierProduct?.Supplier?.ContactName ?? "Không có thông tin liên hệ")</p>
+                                        <p><strong>Email:</strong> @(item.SupplierProduct?.Supplier?.Email ?? "Không có email")</p>
+                                        <p><strong>Số điện thoại:</strong> @(item.SupplierProduct?.Supplier?.PhoneNumber ?? "Không có số điện thoại")</p>
+                                        <p><strong>Địa chỉ:</strong> @(item.SupplierProduct?.Supplier?.Address ?? "Không có địa chỉ")</p>
+                                        <p><strong>Ghi chú:</strong> @(item.SupplierProduct?.Supplier?.Notes ?? "Không có ghi chú")</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal Footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+                <!-- Modal Chỉnh sửa -->
+                <div class="modal fade" id="editModal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="editModalLabel-@item.Id" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editModalLabel-@item.Id">Chỉnh sửa: @item.SupplierProduct.ProductName</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Modal Body -->
+                            <div class="modal-body">
+                                <form asp-action="UpdateInventory" method="post">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <div class="form-group">
+                                        <label for="productName">Tên Sản Phẩm:</label>
+                                        <input type="text" class="form-control" id="productName" name="productName" value="@item.SupplierProduct.ProductName" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="sellingPrice_@item.Id">Giá Bán:</label>
+                                        <input type="text" class="form-control sellingPrice" id="sellingPrice_@item.Id" name="sellingPrice" value="@String.Format("{0:N0}", item.SellingPrice)" required />
+
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <label for="location">Vị Trí:</label>
+                                        <input type="text" class="form-control" id="location" name="location" value="@item.Location" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="notes">Ghi Chú:</label>
+                                        <textarea class="form-control" id="notes" name="notes">@item.Notes</textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Lưu Thay Đổi</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Modal Cập Nhật Trạng Thái -->
+                <div class="modal fade" id="statusModal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel-@item.Id" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="statusModalLabel-@item.Id">Cập nhật trạng thái</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Modal Body -->
+                            <div class="modal-body">
+                                <form asp-action="UpdateStatus" method="post">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <div class="form-group">
+                                        <label for="status">Trạng Thái:</label>
+                                        <select class="form-control" name="status" id="status">
+                                            <option value="Đang bán" selected="@(item.Status == "Đang bán")">Đang bán</option>
+                                            <option value="Chờ xác nhận" selected="@(item.Status == "Chờ xác nhận")">Chờ xác nhận</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+            }
+        </div>
+
+
+
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/js/off-canvas.js"></script>
+    <script src="~/js/hoverable-collapse.js"></script>
+    <script src="~/js/template.js"></script>
+    <script src="~/js/settings.js"></script>
+    <script src="~/js/todolist.js"></script>
+
+    <script>
+        // Hiển thị Toast Modal
+        function showToast() {
+            var toast = document.getElementById('successToast');
+            toast.classList.remove('hidden');
+            toast.classList.add('show');
+
+            // Tự động ẩn sau 3 giây
+            setTimeout(function () {
+                toast.classList.remove('show');
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Kích hoạt khi có TempData["SuccessMessage"]
+        window.onload = function () {
+            if (@TempData["SuccessMessage"] != null) {
+                showToast();
+            }
+        };
+
+    </script>
+
+    <script>
+        // Hàm thay đổi hình ảnh chính khi nhấn vào hình ảnh nhỏ
+        function changeMainImage(productId, imageUrl) {
+            // Tìm ID của main image dựa trên productId
+            var mainImage = document.getElementById('mainImage-' + productId);
+            if (mainImage) {
+                mainImage.src = imageUrl; // Cập nhật src của hình ảnh chính
+            }
+        }
+
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Lấy tất cả các input có class là sellingPrice
+            var sellingPriceInputs = document.querySelectorAll('.sellingPrice');
+
+            // Hàm định dạng giá trị với dấu phẩy
+            function formatCurrency(value) {
+                value = value.replace(/[^0-9]/g, ''); // Loại bỏ ký tự không phải số
+                return value.replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Thêm dấu phẩy
+            }
+
+            // Thêm sự kiện cho tất cả các ô input
+            sellingPriceInputs.forEach(function (input) {
+                input.addEventListener('input', function (event) {
+                    var inputValue = event.target.value;
+                    event.target.value = formatCurrency(inputValue); // Cập nhật giá trị cho ô input
+                });
+            });
+        });
+
+
+
+
+    </script>
+</body>
+
+</html>
+
+
+                    

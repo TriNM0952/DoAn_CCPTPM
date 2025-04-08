@@ -1,0 +1,236 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Admin Dashboard - 2H&V</title>
+
+    <!-- Fonts and Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
+
+    <!-- Custom styles -->
+    <link href="~/admin/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="~/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        /* Điều chỉnh màu sắc cho Sidebar và Topbar */
+        .bg-gradient-primary {
+            background-color: #007bff; /* Màu xanh chủ đạo */
+            background-image: linear-gradient(180deg, #0056b3 10%, #007bff 100%);
+            color: #fff;
+        }
+
+        /* Màu cho Sidebar Item khi chọn */
+        .nav-item.active .nav-link, .nav-item .nav-link:hover {
+            color: #ffffff;
+            background-color: #0056b3; /* Màu xanh đậm khi hover */
+        }
+
+        /* Màu nền cho Topbar */
+        .bg-white.topbar {
+            background-color: #f8f9fc; /* Màu nền nhẹ nhàng */
+            border-bottom: 1px solid #e3e6f0; /* Đường kẻ ngăn cách */
+        }
+
+        /* Màu cho các nút trong Sidebar */
+        .sidebar .nav-link {
+            color: #ffffff;
+        }
+
+        /* Màu cho Footer */
+        .sticky-footer {
+            background-color: #f8f9fc;
+        }
+
+        /* Nút quay lại trang chính */
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        /* Chữ và biểu tượng trong Sidebar */
+        .sidebar-brand-text, .sidebar-brand-icon {
+            color: #ffffff;
+        }
+    </style>
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="~/Admin">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fa-solid fa-shop"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">2H&V</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Quản lý Sản phẩm -->
+            <li class="nav-item active">
+                <a class="nav-link" href="~/Admin">
+                    <i class="fa-solid fa-book"></i>
+                    <span>Quản lý sản phẩm</span>
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">Quản lý</div>
+
+            <!-- Quản lý Tài khoản -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAccounts" aria-expanded="true" aria-controls="collapseAccounts">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Quản lý tài khoản</span>
+                </a>
+                <div id="collapseAccounts" class="collapse" aria-labelledby="headingAccounts" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Phân loại:</h6>
+                        <a class="collapse-item" href="~/Admin/KhachHang/Index">Khách hàng</a>
+                        <a class="collapse-item" href="#">Nhân viên</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Quản lý Nhà Cung Cấp -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSuppliers" aria-expanded="true" aria-controls="collapseSuppliers">
+                    <i class="fa-solid fa-truck"></i>
+                    <span>Quản lý Nhà Cung Cấp</span>
+                </a>
+                <div id="collapseSuppliers" class="collapse" aria-labelledby="headingSuppliers" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Phân loại:</h6>
+                        <a class="collapse-item" href="~/Admin/Supplier/Index">Danh sách Nhà Cung Cấp</a>
+                        <a class="collapse-item" href="~/Admin/Supplier/Create">Thêm Nhà Cung Cấp Mới</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Quản lý Sản phẩm -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProducts" aria-expanded="true" aria-controls="collapseProducts">
+                    <i class="fa-solid fa-boxes"></i>
+                    <span>Sản phẩm</span>
+                </a>
+                <div id="collapseProducts" class="collapse" aria-labelledby="headingProducts" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Phân loại:</h6>
+                        <a class="collapse-item" href="~/Admin/DonHang/Index">Hóa đơn</a>
+                        <a class="collapse-item" href="~/Admin/ProductManager/Index">Tổng hàng</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Category -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCategories" aria-expanded="true" aria-controls="collapseCategories">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Category</span>
+                </a>
+                <div id="collapseCategories" class="collapse" aria-labelledby="headingCategories" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="~/Admin/Category/Index">Phân loại</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Doanh thu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRevenue" aria-expanded="true" aria-controls="collapseRevenue">
+                    <i class="fas fa-fw fa-chart-line"></i>
+                    <span>Doanh thu</span>
+                </a>
+                <div id="collapseRevenue" class="collapse" aria-labelledby="headingRevenue" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="~/Admin/SalesRecord/Index">Xem Doanh thu</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Quản lý Kho -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInventory" aria-expanded="true" aria-controls="collapseInventory">
+                    <i class="fas fa-fw fa-box"></i>
+                    <span>Quản lý Kho</span>
+                </a>
+                <div id="collapseInventory" class="collapse" aria-labelledby="headingInventory" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="~/Admin/Inventory/Index">Xem Kho Hàng</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Quản lý Mã Giảm Giá -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDiscount" aria-expanded="true" aria-controls="collapseDiscount">
+                    <i class="fas fa-fw fa-box"></i>
+                    <span>Quản lý Mã Giảm Giá</span>
+                </a>
+                <div id="collapseDiscount" class="collapse" aria-labelledby="headingDiscount" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="~/Admin/Discount/Index">Xem Mã Giảm Giá</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+        </ul>
+        <!-- End of Sidebar -->
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                        <!-- Alerts and Messages -->
+                        <!-- User Information -->
+                        <!-- ... -->
+                    </ul>
+                </nav>
+                <!-- End of Topbar -->
+                <!-- Page Content -->
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+                <!-- End of Page Content -->
+            </div>
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Bản quyền By 2H&V</span>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="~/Inventory/Index" class="btn btn-primary">Trở về trang mua hàng</a>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/admin/vendor/jquery/jquery.min.js"></script>
+    <script src="~/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="~/admin/js/sb-admin-2.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

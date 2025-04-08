@@ -1,0 +1,604 @@
+﻿@model Lab03.Models.SupplierProduct
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chi tiết Sản Phẩm</title>
+    <link rel="stylesheet" href="~/vendors/typicons/typicons.css">
+    <link rel="stylesheet" href="~/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/css/vertical-layout-light/style.css">
+    <style>
+        /* CSS tùy chỉnh cho giao diện */
+        .container {
+            font-family: Arial, sans-serif;
+            margin-top: 20px;
+        }
+
+        .product-main-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .product-thumbnails {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+            .product-thumbnails img {
+                width: 80px;
+                height: 80px;
+                object-fit: cover;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+        .product-info, .product-config, .supplier-info {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+            .product-info .info-label {
+                font-weight: bold;
+                color: #333;
+            }
+
+            .product-info .info-value {
+                color: #555;
+            }
+
+            .product-config h5, .supplier-info h5 {
+                color: #007bff;
+                font-weight: bold;
+            }
+
+        .edit-btn {
+            position: absolute;
+            top: 0px;
+            right: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+            .edit-btn:hover {
+                background-color: #0056b3;
+            }
+
+        .section-title {
+            position: relative;
+            padding-right: 40px;
+        }
+
+        .product-config, .product-info {
+            position: relative;
+        }
+
+        .section-title span {
+            font-weight: normal;
+        }
+
+        /* Nút chỉnh sửa */
+        .edit-btn:hover {
+            background-color: #28a745;
+        }
+
+
+        .img-thumbnail {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .img-thumbnail:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            }
+
+        .config{
+            display: flex;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Chi tiết Sản Phẩm: @Model.ProductName</h2>
+
+        <div class="row">
+            <!-- Hình ảnh sản phẩm -->
+            <div class="col-md-6">
+                <div class="section-title">
+                    <button class="edit-btn" data-toggle="modal" data-target="#editConfigModal">Chỉnh sửa</button>
+                </div>
+                <img id="mainImage" src="@Model.ProductImages.FirstOrDefault()?.Url" class="product-main-image" alt="Hình ảnh sản phẩm chính" />
+
+                <div class="product-thumbnails">
+                    @foreach (var image in Model.ProductImages)
+                    {
+                        <img src="@image.Url" alt="Thumbnail" class="img-thumbnail small-image" onclick="changeMainImage('@image.Url')" />
+                    }
+                </div>
+                <a href="@Url.Action("Display", "Supplier", new { area = "Admin", id = Model.SupplierId })" class="btn btn-info">Trở về</a>
+            </div>
+
+
+            <!-- Modal chỉnh sửa hình ảnh -->
+            <div class="modal fade" id="editConfigModal" tabindex="-1" role="dialog" aria-labelledby="editConfigModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editConfigModalLabel">Chỉnh sửa hình ảnh sản phẩm</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Form tải lên ảnh mới -->
+                            <form id="addImageForm" asp-action="AddProductImage" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="productId" value="@Model.Id" /> <!-- Truyền ID sản phẩm -->
+                                <div class="form-group">
+                                    <label for="newImage">Chọn ảnh mới</label>
+                                    <input type="file" id="newImage" name="ImageFiles" class="form-control" multiple />
+                                </div>
+                                <button type="submit" class="btn btn-primary">Thêm ảnh mới</button>
+                            </form>
+
+                            <!-- Hiển thị các ảnh hiện có -->
+                            <div class="mt-3">
+                                <h6>Danh sách ảnh hiện có</h6>
+                                <ul class="list-group" id="imageList">
+                                    @foreach (var image in Model.ProductImages)
+                                    {
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <img src="@image.Url" class="img-thumbnail small-image" alt="Thumbnail" style="max-width: 50px;" />
+
+                                            <!-- Form để xóa ảnh -->
+                                            <form action="@Url.Action("DeleteProductImage", "Supplier")" method="post" style="display:inline;">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="imageId" value="@image.Id" />
+                                                <input type="hidden" name="productId" value="@Model.Id" />
+                                                <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                                            </form>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!-- Thông tin sản phẩm -->
+            <div class="col-md-6">
+                <div class="product-info">
+                    <div class="section-title">
+
+                        <h5>Mô tả sản phẩm</h5>
+
+                        <!--đã có modal-->
+                        <button class="edit-btn btn btn-primary" data-toggle="modal" data-target="#editDescriptionModal">Chỉnh sửa</button>
+
+
+                    </div>
+                    <p><span class="info-label">Mã sản phẩm:</span> <span class="info-value">@Model.Id</span></p>
+                    <p><span class="info-label">Tên sản phẩm:</span> <span class="info-value">@Model.ProductName</span></p>
+                    <p><span class="info-label">Thương hiệu:</span> <span class="info-value">@Model.Brand</span></p>
+                    <p><span class="info-label">Danh mục:</span> <span class="info-value">@Model.Category?.Name</span></p>
+                    <p><span class="info-label">Giá Cost:</span> <span class="info-value">@string.Format("{0:#,##0} VNĐ", Model.CostPrice)</span></p>
+                    <p><span class="info-label">Trạng thái:</span> <span class="info-value">@Model.Status</span></p>
+                    <p><span class="info-label">Ngày nhập:</span> <span class="info-value">@Model.ImportDate.ToString("dd/MM/yyyy")</span></p>
+                    <p><span class="info-label">Số lượng trong kho:</span> <span class="info-value">@Model.Quantity</span></p>
+                </div>
+
+
+                            <!-- Modal chỉnh sửa mô tả sản phẩm -->
+                            <div class="modal fade" id="editDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="editDescriptionModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editDescriptionModalLabel">Chỉnh sửa mô tả sản phẩm</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <!-- Form chỉnh sửa sản phẩm -->
+                                            <form method="post" action="@Url.Action("EditProductDescription", "Supplier")">
+                                                <!-- Sản phẩm ID (ẩn để gửi cùng form) -->
+                                                <input type="hidden" name="Id" value="@Model.Id" />
+
+                                                <!-- Tên sản phẩm -->
+                                                <div class="form-group">
+                                                    <label for="ProductName">Tên sản phẩm</label>
+                                                    <input type="text" class="form-control" id="ProductName" name="ProductName" value="@Model.ProductName" required />
+                                                </div>
+
+                                                <!-- Thương hiệu -->
+                                                <div class="form-group">
+                                                    <label for="Brand">Thương hiệu</label>
+                                                    <input type="text" class="form-control" id="Brand" name="Brand" value="@Model.Brand" required />
+                                                </div>
+
+                                                <!-- Giá Cost -->
+                                                <div class="form-group">
+                                                    <label for="CostPrice">Giá Cost</label>
+                                                    <input type="number" class="form-control" id="CostPrice" name="CostPrice" value="@Model.CostPrice" required />
+                                                </div>
+
+                                                <!-- Trạng thái -->
+                                                <div class="form-group">
+                                                    <label for="status">Trạng Thái:</label>
+                                                    <select class="form-control" name="Status" id="status">
+                                                        <option value="Đang bán" selected="@Model.Status == " Đang bán"">Đang bán</option>
+                                                        <option value="Chờ xác nhận" selected="@Model.Status == " Chờ xác nhận"">Chờ xác nhận</option>
+                                                        <option value="Hết hàng" selected="@Model.Status == " Hết hàng"">Hết hàng</option>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Nút Lưu thay đổi -->
+                                                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+                <!--Hiển thị cấu hình sản phẩm-->
+                <div class="product-config">
+                   
+
+                        <h5>Cấu hình sản phẩm</h5>
+                        <!--đã có modal-->
+                    <button type="button" class="edit-btn btn btn-primary" data-toggle="modal" data-target="#configModal-@Model.Id">
+                            Chỉnh sửa
+                        </button>
+                   
+
+                    <div class="row">
+
+                        <div class="col-md-12 config">
+                            @if (Model.SupplierProductConfig != null)
+                            {
+                                // Danh sách các trường cần hiển thị cho mỗi CategoryId
+                                var visibleFields = new List<string>();
+
+                                // Giới hạn các trường cấu hình theo CategoryId
+                                if (Model.CategoryId == 1) // Ví dụ iPhone
+                                {
+                                    visibleFields = new List<string> { "Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CameraSau", "CameraTruoc", "Sim", "DungLuong" };
+                                }
+                                else if (Model.CategoryId == 2) // Ví dụ AirPods
+                                {
+                                    visibleFields = new List<string> { "Color", "KetNoi", "ChatLuongAmThanh", "ThoiLuongPin" };
+                                }
+                                else if (Model.CategoryId == 3) // Ví dụ Apple Watch
+                                {
+                                    visibleFields = new List<string> { "Color", "CamBien", "KhaNangChongNuoc", "KichThuoc" };
+                                }
+                                else if (Model.CategoryId == 4) // iPad
+                                {
+                                    visibleFields = new List<string> { "Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CameraSau", "CameraTruoc", "Sim", "DungLuong" };
+                                }
+                                else if (Model.CategoryId == 5) // MacBook
+                                {
+                                    visibleFields = new List<string> { "Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CardDoHoa", "CongKetNoi", "TrongLuong" };
+                                }
+
+                                // Lọc và hiển thị các trường cần thiết
+                                @foreach (var property in Model.SupplierProductConfig.GetType().GetProperties())
+                                {
+                                    var value = property.GetValue(Model.SupplierProductConfig);
+                                    if (visibleFields.Contains(property.Name)) // Kiểm tra nếu thuộc tính có trong danh sách cần hiển thị
+                                    {
+                                        <li class="list-group-item col-md-6">
+                                            <strong>@property.Name:</strong> @(value != null ? value.ToString() : "Không có giá trị")
+                                        </li>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <li class="list-group-item">Không có cấu hình chi tiết</li>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                
+                    
+                             <!-- Modal để chỉnh sửa cấu hình -->
+                            <div class="modal fade" id="configModal-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="configModalLabel-@Model.Id" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="configModalLabel-@Model.Id">Nhập cấu hình: @Model.ProductName</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form asp-action="AddProductConfigDetails" method="post" class="form-horizontal">
+                                                <input type="hidden" name="productId" value="@Model.Id" />
+                                                <div id="configFields-@Model.Id" class="form-row">
+                                                    @if (Model.SupplierProductConfig != null)
+                                                    {
+                                                        var visibleFields = new List<string>();
+
+                                                        // Giới hạn các trường cấu hình theo CategoryId
+                                                        if (Model.CategoryId == 1) // Ví dụ iPhone
+                                                        {
+                                                            visibleFields = new List<string> { "Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CameraSau", "CameraTruoc", "Sim", "DungLuong" };
+                                                        }
+                                                        else if (Model.CategoryId == 2) // Ví dụ AirPods
+                                                        {
+                                                            visibleFields = new List<string> { "Color", "KetNoi", "ChatLuongAmThanh", "ThoiLuongPin" };
+                                                        }
+                                                        else if (Model.CategoryId == 3) // Ví dụ Apple Watch
+                                                        {
+                                                            visibleFields = new List<string> { "Color", "CamBien", "KhaNangChongNuoc", "KichThuoc" };
+                                                        }
+                                                        else if (Model.CategoryId == 4) // iPad
+                                                        {
+                                                            visibleFields = new List<string> { "Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CameraSau", "CameraTruoc", "Sim", "DungLuong" };
+                                                        }
+                                                        else if (Model.CategoryId == 5) // MacBook
+                                                        {
+                                                            visibleFields = new List<string> { "Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CardDoHoa", "CongKetNoi", "TrongLuong" };
+                                                        }
+
+                                                            // Lọc và hiển thị các trường cần thiết
+                                                        @foreach (var property in Model.SupplierProductConfig.GetType().GetProperties())
+                                                        {
+                                                            var value = property.GetValue(Model.SupplierProductConfig);
+                                                            if (visibleFields.Contains(property.Name)) // Kiểm tra nếu thuộc tính có trong danh sách cần hiển thị
+                                                            {
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="@property.Name">@property.Name:</label>
+                                                                    <input type="text" name="@property.Name" class="form-control" value="@value" />
+                                                                </div>
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <p>Không có cấu hình cho sản phẩm này. Vui lòng nhập thông tin cấu hình.</p>
+                                                    }
+                                                </div>
+                                                <button type="submit" class="btn btn-primary mt-3">Lưu cấu hình</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+               
+
+
+
+
+
+
+
+
+
+
+                
+
+
+
+                <!-- Modal nhập cấu hình sản phẩm -->
+                <div class="modal fade" id="configModal-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="configModalLabel-@Model.Id" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="configModalLabel-@Model.Id">Nhập cấu hình: @Model.ProductName</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form asp-action="AddProductConfig" method="post" class="form-horizontal">
+                                    <input type="hidden" name="productId" value="@Model.Id" />
+
+                                    <div id="configFields-@Model.Id" class="form-row">
+                                        @if (Model.SupplierProductConfig != null)
+                                        {
+                                            var visibleFields = new List<string>();
+
+                                            // Giới hạn các trường cấu hình theo CategoryId
+                                            if (Model.CategoryId == 1) // Ví dụ iPhone
+                                            {
+                                                visibleFields = new List<string> { "Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CameraSau", "CameraTruoc", "Sim", "DungLuong" };
+                                            }
+                                            else if (Model.CategoryId == 2) // Ví dụ AirPods
+                                            {
+                                                visibleFields = new List<string> { "Color", "KetNoi", "ChatLuongAmThanh", "ThoiLuongPin" };
+                                            }
+                                            else if (Model.CategoryId == 3) // Ví dụ Apple Watch
+                                            {
+                                                visibleFields = new List<string> { "Color", "CamBien", "KhaNangChongNuoc", "KichThuoc" };
+                                            }
+
+                                            // Lọc và hiển thị các trường cần thiết
+                                            foreach (var property in Model.SupplierProductConfig.GetType().GetProperties())
+                                            {
+                                                var value = property.GetValue(Model.SupplierProductConfig);
+                                                if (visibleFields.Contains(property.Name)) // Kiểm tra nếu thuộc tính có trong danh sách cần hiển thị
+                                                {
+                                                    <div class="form-group col-md-6">
+                                                        <label for="@property.Name">@property.Name</label>
+                                                        <!-- Hiển thị giá trị của trường nếu có -->
+                                                        <input type="text" name="@property.Name" class="form-control" value="@value" />
+                                                    </div>
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <p>Không có cấu hình cho sản phẩm này. Vui lòng nhập thông tin cấu hình.</p>
+                                        }
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary mt-3">Lưu cấu hình</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+                <!-- Thông tin nhà cung cấp -->
+                <div class="supplier-info">
+                    <div class="section-title d-flex justify-content-between align-items-center">
+                        <h5>Thông tin nhà cung cấp</h5>
+
+                        <!--Đã có modal-->
+                        <button type="button" class="edit-btn btn btn-primary" data-toggle="modal" data-target="#editSupplierModal-@Model.Id">
+                            Chỉnh sửa
+                        </button>
+
+
+
+
+                    </div>
+                    <p><strong>Tên nhà cung cấp:</strong> @(Model.Supplier?.Id )</p>
+                    <p><strong>Tên nhà cung cấp:</strong> @(Model.Supplier?.SupplierName ?? "Không có nhà cung cấp")</p>
+                    <p><strong>Liên hệ:</strong> @(Model.Supplier?.ContactName ?? "Không có thông tin liên hệ")</p>
+                    <p><strong>Email:</strong> @(Model.Supplier?.Email ?? "Không có email")</p>
+                    <p><strong>Số điện thoại:</strong> @(Model.Supplier?.PhoneNumber ?? "Không có số điện thoại")</p>
+                    <p><strong>Địa chỉ:</strong> @(Model.Supplier?.Address ?? "Không có địa chỉ")</p>
+                    <p><strong>Ghi chú:</strong> @(Model.Supplier?.Notes ?? "Không có ghi chú")</p>
+                </div>
+
+
+
+                <!-- Modal chỉnh sửa thông tin nhà cung cấp -->
+                <div class="modal" id="editSupplierModal-@Model.Id" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Chỉnh sửa nhà cung cấp</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Form chỉnh sửa thông tin nhà cung cấp -->
+                                <form asp-action="EditSupplier" method="post">
+                                    <input type="hidden" name="Id" value="@Model.SupplierId" />
+                                    <input type="hidden" name="IdProduct" value="@Model.Id" />
+                                    
+                                    <!-- Tên nhà cung cấp -->
+                                    <div class="form-group">
+                                        <label for="SupplierName">Tên nhà cung cấp</label>
+                                        <input type="text" class="form-control" id="SupplierName" name="SupplierName" value="@Model.Supplier.SupplierName" required />
+                                    </div>
+
+                                    <!-- Tên liên hệ -->
+                                    <div class="form-group">
+                                        <label for="ContactName">Tên liên hệ</label>
+                                        <input type="text" class="form-control" id="ContactName" name="ContactName" value="@Model.Supplier.ContactName" />
+                                    </div>
+
+                                    <!-- Số điện thoại -->
+                                    <div class="form-group">
+                                        <label for="PhoneNumber">Số điện thoại</label>
+                                        <input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber" value="@Model.Supplier.PhoneNumber" />
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="form-group">
+                                        <label for="Email">Email</label>
+                                        <input type="email" class="form-control" id="Email" name="Email" value="@Model.Supplier.Email" />
+                                    </div>
+
+                                    <!-- Địa chỉ -->
+                                    <div class="form-group">
+                                        <label for="Address">Địa chỉ</label>
+                                        <input type="text" class="form-control" id="Address" name="Address" value="@Model.Supplier.Address" />
+                                    </div>
+
+                                    <!-- Số tài khoản ngân hàng -->
+                                    <div class="form-group">
+                                        <label for="BankAccountNumber">Số tài khoản ngân hàng</label>
+                                        <input type="text" class="form-control" id="BankAccountNumber" name="BankAccountNumber" value="@Model.Supplier.BankAccountNumber" />
+                                    </div>
+
+                                    <!-- Tên ngân hàng -->
+                                    <div class="form-group">
+                                        <label for="BankName">Tên ngân hàng</label>
+                                        <input type="text" class="form-control" id="BankName" name="BankName" value="@Model.Supplier.BankName" />
+                                    </div>
+
+                                    <!-- Mã số thuế -->
+                                    <div class="form-group">
+                                        <label for="TaxCode">Mã số thuế</label>
+                                        <input type="text" class="form-control" id="TaxCode" name="TaxCode" value="@Model.Supplier.TaxCode" />
+                                    </div>
+
+                                    <!-- Ghi chú -->
+                                    <div class="form-group">
+                                        <label for="Notes">Ghi chú</label>
+                                        <textarea class="form-control" id="Notes" name="Notes">@Model.Supplier.Notes</textarea>
+                                    </div>
+
+                                    <!-- Nút lưu thông tin -->
+                                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Thay đổi hình ảnh chính khi người dùng click vào hình ảnh thu nhỏ
+        function changeMainImage(imageUrl) {
+            document.getElementById('mainImage').src = imageUrl;
+        }
+
+        
+    </script>
+
+    
+</body>
+
+</html>
