@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Xác nhận Thanh toán";
+}
+
+<h1 class="text-center">Xác nhận Thanh toán</h1>
+
+<div class="container">
+    <h3>Thông tin thanh toán</h3>
+    <p><strong>Sản phẩm:</strong> @ViewBag.ProductName</p>
+    <p><strong>Số lượng:</strong> @ViewBag.Quantity</p>
+    <p><strong>Giá tiền:</strong> @ViewBag.Price VNĐ</p>
+    <p><strong>Tổng cộng:</strong> @(ViewBag.Quantity * ViewBag.Price) VNĐ</p>
+
+    <!-- Form xác nhận thanh toán -->
+    <form asp-action="CreatePaymentLink" asp-controller="Payment" method="post">
+        <input type="hidden" name="productName" value="@ViewBag.ProductName" />
+        <input type="hidden" name="quantity" value="@ViewBag.Quantity" />
+        <input type="hidden" name="price" value="@ViewBag.Price" />
+
+        <button type="submit" class="btn btn-primary">Thanh toán</button>
+        <a asp-action="Index" asp-controller="GioHang" class="btn btn-secondary">Quay lại giỏ hàng</a>
+    </form>
+</div>

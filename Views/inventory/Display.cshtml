@@ -1,0 +1,816 @@
+﻿@model Inventory
+
+@using Microsoft.AspNetCore.Mvc.Rendering
+<link rel="stylesheet" href="~/css/InventoryDisplay.css" />
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<style>
+    .product-gallery-big img {
+        width: 450px; /* Chiều rộng 100% của container */
+        max-width: 400px; /* Chiều rộng tối đa */
+        height: 380px; /* Tự động điều chỉnh chiều cao theo tỷ lệ */
+        margin: 0 auto; /* Căn giữa */
+        display: block; /* Hiển thị dạng block */
+        border-radius: 10px; /* Bo góc hình ảnh chính */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bóng đổ */
+    }
+
+
+    /* Thumbnail container */
+    #thumbnail-row {
+        display: flex; /* Hiển thị flex để nằm trên 1 hàng */
+        gap: 10px; /* Khoảng cách giữa các ảnh */
+        justify-content: center; /* Căn giữa nội dung */
+        align-items: center; /* Căn giữa theo trục dọc */
+        width: 100px;
+        cursor: pointer;
+    }
+        /* Thumbnail images */
+        #thumbnail-row .small-image {
+            width: 80px; /* Kích thước tự động */
+            max-width: 80px; /* Giới hạn chiều rộng tối đa */
+            max-height: 90px;
+            height: 85px;
+            object-fit: cover; /* Cắt ảnh vừa khít khung */
+            border: 2px solid #ddd; /* Viền mỏng */
+            border-radius: 5px; /* Bo góc */
+            transition: transform 0.3s ease, border-color 0.3s ease; /* Hiệu ứng hover */
+        }
+            /* Hover effect */
+            #thumbnail-row .small-image:hover {
+                transform: scale(1.1); /* Phóng to ảnh */
+                border-color: #000000; /* Đổi màu viền */
+            }
+
+    .col-lg-9 {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-radius: 5px;
+        padding-top: 10px;
+    }
+
+    /* HÀNG 1 CỘT 2 */
+    .col-lg-3 {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin-bottom: 10px;
+        margin-left: 15px;
+        padding-bottom: 10px;
+        border-radius: 5px;
+        padding-top: 10px;
+        width: 23%;
+    }
+
+    .product-title {
+        font-size: 25px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+
+    .featured-products-section {
+        background-color: red;
+        border: 1px solid #ddd; /* Viền xám nhạt */
+        border-radius: 8px; /* Bo góc */
+        padding: 20px; /* Khoảng cách bên trong */
+        background-color: #fff; /* Nền trắng */
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ */
+        margin-bottom: 30px; /* Khoảng cách dưới */
+    }
+
+
+    .product-price {
+        font-size: 16px;
+        font-weight: bold;
+        color: #dc3545;
+        margin-bottom: 10px;
+    }
+
+        .product-price .old-price {
+            font-size: 12px;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 5px;
+        }
+
+    .product-info {
+        font-size: 12px;
+        color: #666;
+    }
+
+
+    .product-details .badge {
+        background-color: #ffc107;
+        color: #fff;
+        font-size: 12px;
+        padding: 5px;
+        border-radius: 4px;
+        display: inline-block;
+        margin-bottom: 10px;
+    }
+
+        .product-details .badge.hot {
+            background-color: #dc3545;
+        }
+
+
+
+    .product-rating {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        margin-bottom: 10px;
+        color: #666;
+    }
+
+        .product-rating .stars {
+            color: #ffc107;
+        }
+
+
+
+  
+
+    .section-category {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+
+
+
+
+
+    .category-item {
+        text-align: center;
+        color: #333;
+        text-decoration: none;
+        margin: 10px;
+    }
+
+        .category-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+            .category-item img:hover {
+                transform: scale(1.1);
+            }
+
+
+
+
+
+
+
+
+
+    .title {
+        display: block;
+        margin-top: 5px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .section-home-banner .carousel-inner img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .box-banner img {
+        width: 100%;
+        height: auto;
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+
+    /* General Section */
+    .section-padding {
+        padding: 20px 0;
+    }
+
+    .featured-product img {
+        border-radius: 10px;
+        width: 100%;
+    }
+
+    .featured-product h5 {
+        font-size: 18px;
+        margin: 10px 0;
+    }
+
+    .featured-product .btn {
+        background-color: #28a745;
+        color: white;
+        font-weight: bold;
+    }
+
+    .box {
+        background-color: #fff;
+    }
+
+    /* Header styles */
+    .box-header {
+        background-color: #59AB6E; /* Red background */
+        color: #fff; /* White text */
+        padding: 10px; /* Inner padding */
+        border-radius: 7px 7px 0 0; /* Rounded top corners */
+        font-size: 90px; /* Font size */
+        font-weight: bold; /* Bold text */
+        display: flex; /* Flexbox for layout */
+        align-items: center; /* Vertically center content */
+    }
+
+        /* Icon styles */
+        .box-header i {
+            margin-right: 5px; /* Space between icon and text */
+        }
+
+    /* Body styles */
+    .box-body {
+        padding: 10px; /* Padding for the list */
+    }
+
+    /* List styles */
+    .link-trend-list {
+        list-style-type: none; /* Remove bullets */
+        margin: 0;
+        padding: 0;
+    }
+
+    /* List item styles */
+    .link-trend-item {
+        margin-bottom: 10px; /* Space between items */
+    }
+
+        /* Link styles */
+        .link-trend-item a {
+            text-decoration: none; /* Remove underline */
+            color: #000; /* Black text */
+        }
+
+        /* Title styles */
+        .link-trend-item .title {
+            font-weight: bold; /* Bold title */
+            display: block; /* Block layout for spacing */
+            margin-bottom: -2px; /* Space below title */
+            font-size: 14px;
+        }
+
+        /* Description styles */
+        .link-trend-item .desc {
+            font-size: 10px; /* Smaller font for description */
+            font-style: italic;
+            color: #666; /* Gray text */
+        }
+
+        /* Hover effects */
+        .link-trend-item a:hover .title {
+            color: #dc3545; /* Red color on hover */
+        }
+
+        .link-trend-item a:hover .desc {
+            color: #333; /* Darker gray on hover */
+        }
+
+    .section-home-banner {
+        max-width: 100%; /* Đảm bảo chiều rộng tối đa không vượt quá container */
+        overflow: hidden; /* Giới hạn nội dung tràn */
+        margin: 20px auto; /* Giữ khoảng cách hợp lý và căn giữa */
+        box-sizing: border-box; /* Tính toán đúng chiều rộng bao gồm padding */
+        /* Section Header */
+    }
+    /* Section Header */
+    .section-header {
+        margin-left: -32px; /* Đẩy sát cạnh trái */
+        margin-right: -32px; /* Đẩy sát cạnh phải */
+        margin-top: -20px;
+        background-color: #59AB6E; /* Màu nền đỏ */
+        padding: 15px 20px; /* Khoảng cách bên trong */
+        border-radius: 8px 8px 0 0; /* Bo góc chỉ phần trên */
+        display: flex;
+        justify-content: space-between; /* Căn đều khoảng cách giữa tiêu đề và tab */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        color: #fff; /* Màu chữ trắng */
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ */
+    }
+
+    .section-title {
+        font-size: 22px;
+        color: #fff;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section-tabs {
+        display: flex;
+        gap: 10px;
+    }
+
+    .tab-btn {
+        border: none;
+        padding: 5px 10px;
+        font-size: 14px;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+        .tab-btn:hover {
+            background-color: #004d00;
+            color: #fff;
+        }
+
+    /* Product Card */
+    .product-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        padding: 15px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        position: relative;
+        text-align: center;
+    }
+
+        .product-card .product-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 5px 10px;
+            font-size: 12px;
+            color: #fff;
+            border-radius: 4px;
+            background-color: #dc3545;
+        }
+
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+
+
+
+
+
+
+    .img-small {
+        max-width: 77px !important;
+    }
+
+
+    .h4 {
+        background-color: cornsilk;
+    }
+
+    a{
+        text-decoration:none;
+    }
+</style>
+
+
+
+
+<section class="wrap wrap-product-detail">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Cột lớn 9/12 (bên trái) -->
+            <div class="col-lg-9 col-md-8 border-box">
+                <div class="box box-border">
+                    <div class="box-body">
+                        <div class="row">
+                            <!-- Cột hiển thị hình ảnh sản phẩm -->
+                            <div class="col-md-6">
+                                <div class="product-gallery">
+                                    <!-- Hình ảnh chính -->
+                                    <div class="product-gallery-big mb-3">
+                                        @if (Model.SupplierProduct?.ProductImages?.Any() == true)
+                                        {
+                                            <img id="mainImage" src="@Model.SupplierProduct.ProductImages.First().Url" class="img-fluid rounded mb-3" alt="Hình ảnh sản phẩm chính" />
+                                        }
+                                        else
+                                        {
+                                            <p>Không có hình ảnh sản phẩm chính</p>
+                                        }
+                                    </div>
+
+                                    <!-- Hình ảnh thu nhỏ dạng 3 cột -->
+                                    <div id="thumbnail-row" class="d-flex justify-content-between" style="max-width: 100%!important;">
+                                        @foreach (var image in Model.SupplierProduct.ProductImages)
+                                        {
+                                            <div class="col-auto">
+                                                <img src="@image.Url" alt="Thumbnail" class="img-thumbnail small-image" onclick="changeMainImage('@image.Url')">
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Cột hiển thị thông tin sản phẩm -->
+                            <div class="col-md-6">
+                                <div class="product-info">
+                                    <h1 class="product-title"> @Model.SupplierProduct?.ProductName</h1>
+                                    <div class="rating">
+                                        <span class="stars">⭐⭐⭐⭐⭐</span>
+                                        <span class="reviews">(1 đánh giá)</span> | <span class="purchased">Đã mua: 10</span>
+                                    </div>
+                                    <div class="price-options" style=" font-weight: bold!important; font-size: 44px!important;>
+                                        <p class="current-price">@String.Format("{0:#,##0} VNĐ", Model.SellingPrice)</p>
+                                    </div>
+
+
+
+
+
+                                    @* bảng màu giá của iphone *@
+                                    <div class="color-options">
+                                        <div class="color-option active">
+                                            <div> <img class="img-fluid" src="~/images/IPHONE/iphone15-vang.png" alt="iPhone 15" alt="Vàng"></div>
+                                            <div>
+                                                <span>Vàng</span>
+                                                <span class="price">13,850,000 ₫</span>
+                                            </div>
+                                        </div>
+                                        <div class="color-option active">
+                                            <div> <img class="img-fluid" src="~/images/IPHONE/iphone15-den.png" alt="iPhone 15" alt="Đen"></div>
+                                            <div>
+                                                <span>Đen</span>
+                                                <span class="price">14,850,000 ₫</span>
+                                            </div>
+                                        </div>
+                                        <div class="color-option active">
+                                            <div> <img class="img-fluid" src="~/images/IPHONE/iphone15-xanhduong.png" alt="iPhone 15" alt="Xanh dương"></div>
+                                            <div>
+                                                <span>Xanh nhạt</span>
+                                                <span class="price">13,850,000 ₫</span>
+                                            </div>
+                                        </div>
+                                        <div class="color-option active">
+                                            <div> <img class="img-fluid" src="~/images/IPHONE/Iphone15-hong.png" alt="iPhone 15" alt="Hồng"></div>
+                                            <div>
+                                                <span>Hồng</span>
+                                                <span class="price">13,850,000 ₫</span>
+                                            </div>
+                                        </div>
+                                        <div class="color-option active">
+                                            <div> <img class="img-fluid" src="~/images/IPHONE/iphone15-xanhla.png" alt="iPhone 15" alt="Xanh lá"></div>
+                                            <div>
+                                                <span>Xanh lá</span>
+                                                <span class="price">13,850,000 ₫</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- Nút Mua ngay và Thêm vào giỏ hàng -->
+                                    <div class="purchase-options d-flex justify-content-between">
+                                        <form asp-action="MuaNgay" method="post">
+                                            <input type="hidden" name="inventoryId" value="@Model.Id" />
+                                            <button type="submit" class="btn-buy-now w-100">Mua ngay</button>
+                                        </form>
+                                        <form asp-action="ThemVaoGio" method="post">
+                                            <input type="hidden" name="inventoryId" value="@Model.Id" />
+                                            <button type="submit" class="btn-add-to-cart">Thêm vào giỏ</button>
+                                        </form>
+
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cột nhỏ 3/12 (bên phải) -->
+            <div class="col-lg-3 col-md-4">
+                <div class="product-details">
+                    <!-- Bộ sản phẩm -->
+                    <div class="detail-section">
+                        <h4><i class="fa fa-box"></i> Bộ sản phẩm</h4>
+                        <ul>
+                            <li>Bộ sản phẩm gồm: Thân máy, Cốc sạc, Cáp sạc, Que lấy Sim</li>
+                            <li>Cam kết máy Quốc tế 100% - Chính hãng Apple</li>
+                        </ul>
+                    </div>
+                    <!-- Bảo hành -->
+                    <div class="detail-section">
+                        <h4><i class="fa fa-shield-alt"></i> Bảo hành</h4>
+                        <ul>
+                            <li>Bảo hành <strong>09 Tháng</strong> tại Phúc Khang Mobile.</li>
+                            <li>Hỗ trợ 1 đổi 1 trong <strong>31 Ngày</strong> nếu có lỗi.</li>
+                            <li>Bảo hành PIN <strong>06 Tháng</strong> thay miễn phí.</li>
+                        </ul>
+                    </div>
+                    <!-- Tình trạng sản phẩm -->
+                    <div class="detail-section">
+                        <h4><i class="fa fa-info-circle"></i> Tình trạng quy cách sản phẩm</h4>
+                        <ul>
+                            <li>Máy trần, không hộp đựng của sản phẩm</li>
+                            <li>Ngoại hình có trầy xước nhẹ</li>
+                            <li>Máy chưa qua sửa chữa</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+        @* Đây là phần thông tin sản phẩm *@
+        <div class="row d-flex flex-wrap-reverse flex-lg-wrap">
+            <div class="col-lg-8 col-left">
+                <div class="box box-border">
+                    <div class="box-body">
+                        <div class="article-body wrap-content wrap-content-detail">
+                            <div class="detail-content">
+                                <p>
+                                    Tại sự kiện diễn ra vào ngày 13/09/2023 (theo giờ Việt Nam). Mẫu iPhone 2023 bản tiêu chuẩn này mang trong mình lối thiết kế sang trọng đẹp mắt,
+                                    với mặt lưng bằng kính pha màu và màn hình Dynamic Island, cùng hiệu năng mạnh mẽ từ chip A16 Bionic và camera chính 48MP.
+                                </p>
+                                <h2 class="">Thiết kế sang trọng và đẹp mắt</h2>
+                                <p>
+                                    Apple iPhone 15 mang đến cho người dùng phong cách thiết kế trẻ trung và hiện đại, nhưng cũng không kém phần sang trọng, với thiết kế cạnh viền
+                                    bo tròn mới trên vỏ máy được hoàn thiện từ nhôm nguyên khối bền bỉ theo thời gian.
+                                </p>
+                                <p style="text-align: center;">
+                                    <img class="img-fluid" src="~/images/Noidung15.png" alt="iPhone 15 Pro Max">
+                                </p>
+                                <p>
+                                    Đi kèm với đó là màn hình Dynamic Island được bảo vệ bởi mặt kính Ceramic Shield đã xuất hiện trên các phiên bản
+                                </p>
+                                <p style="text-align: center;">
+                                    <img class="img-fluid" src="~/images/Noidung15-phan2.png" alt="iPhone 15 Pro Max">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="col-lg-4 col-right">
+                <div class="specifications">
+                    <div class="spec-title">
+                        <i class="fa fa-cog"></i> Thông số kỹ thuật
+                    </div>
+                    <ul class="spec-list">
+                        <li><strong>Màn hình:</strong> OLED, 6.1, Super Retina XDR</li>
+                        <li><strong>Hệ điều hành:</strong> iOS 17</li>
+                        <li><strong>Camera sau:</strong> Chính 48 MP & Phụ 12 MP</li>
+                        <li><strong>Camera trước:</strong> 12 MP</li>
+                        <li><strong>CPU:</strong> Apple A16 Bionic</li>
+                        <li><strong>RAM:</strong> 6 GB</li>
+                        <li><strong>Bộ nhớ trong:</strong> 128 GB</li>
+                        <li><strong>Thẻ SIM:</strong> 1 Nano SIM & 1 eSIM, Hỗ trợ 5G</li>
+                        <li><strong>Dung lượng pin:</strong> 3349 mAh, 20 W</li>
+                    </ul>
+
+
+
+
+
+
+
+                    <!-- Nút để mở Modal -->
+                    <button class="view-more-btn btn btn-primary" data-toggle="modal" data-target="#iphoneSpecModal">
+                        Xem chi tiết thông tin
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="iphoneSpecModal" tabindex="-1" role="dialog" aria-labelledby="iphoneSpecModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="iphoneSpecModalLabel">Thông Số Kỹ Thuật iPhone 16 Pro Max 1TB Quốc Tế</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <!-- Modal Body -->
+                                <div class="modal-body">
+                                    <!-- Thông tin Màn hình -->
+                                    <h4>Màn hình</h4>
+                                    <ul>
+                                        <li><strong>Công nghệ màn hình:</strong> OLED</li>
+                                        <li><strong>Kích thước màn hình:</strong> 6.9"</li>
+                                        <li><strong>Độ phân giải:</strong> Super Retina XDR (1320 x 2868 Pixels)</li>
+                                        <li><strong>Tần số quét:</strong> 120 Hz</li>
+                                        <li><strong>Độ sáng tối đa:</strong> 2000 nits</li>
+                                        <li><strong>Chất liệu mặt:</strong> Kính cường lực Ceramic Shield</li>
+                                    </ul>
+
+                                    <!-- Thông tin Camera -->
+                                    <h4>Camera</h4>
+                                    <p><strong>Camera sau:</strong> Chính 48 MP & Phụ 48 MP, 12 MP</p>
+                                    <ul>
+                                        <li><strong>Quay phim:</strong> HD 720p@30fps, FullHD 1080p@60fps, 4K 2160p@60fps, và nhiều định dạng khác.</li>
+                                        <li><strong>Đèn Flash:</strong> Có</li>
+                                        <li><strong>Tính năng:</strong> Smart HDR 5, Zoom quang học, Chế độ hành động (Action Mode), Chống rung quang học (OIS), Chế độ chân dung đêm, và nhiều tính năng khác.</li>
+                                    </ul>
+
+                                    <!-- Thông tin Hệ điều hành & CPU -->
+                                    <h4>Hệ Điều Hành & CPU</h4>
+                                    <p><strong>Hệ điều hành:</strong> iOS 18</p>
+                                    <p><strong>CPU:</strong> Apple A18 Pro 6 nhân</p>
+                                    <p><strong>GPU:</strong> Apple GPU</p>
+
+                                    <!-- Thông tin Bộ Nhớ & Lưu Trữ -->
+                                    <h4>Bộ Nhớ & Lưu Trữ</h4>
+                                    <p><strong>RAM:</strong> 8 GB</p>
+                                    <p><strong>Dung lượng lưu trữ:</strong> 1 TB (Dung lượng còn lại: 1009 GB)</p>
+
+                                    <!-- Thông tin Kết nối -->
+                                    <h4>Kết Nối</h4>
+                                    <ul>
+                                        <li><strong>Mạng di động:</strong> Hỗ trợ 5G</li>
+                                        <li><strong>SIM:</strong> 2 eSIM</li>
+                                        <li><strong>Wifi:</strong> Wi-Fi MIMO, Wi-Fi 7</li>
+                                        <li><strong>Bluetooth:</strong> v5.3</li>
+                                    </ul>
+
+                                    <!-- Thông tin Pin & Sạc -->
+                                    <h4>Pin & Sạc</h4>
+                                    <p><strong>Dung lượng pin:</strong> 4685 mAh</p>
+                                    <p><strong>Loại pin:</strong> Li-Ion</p>
+                                    <p><strong>Hỗ trợ sạc tối đa:</strong> 25 W</p>
+
+                                    <!-- Thông tin Thiết kế & Trọng Lượng -->
+                                    <h4>Thiết Kế & Trọng Lượng</h4>
+                                    <ul>
+                                        <li><strong>Thiết kế:</strong> Nguyên khối</li>
+                                        <li><strong>Chất liệu:</strong> Khung Titan & Mặt lưng kính cường lực</li>
+                                        <li><strong>Kích thước:</strong> Dài 163 mm - Ngang 77.6 mm - Dày 8.25 mm</li>
+                                        <li><strong>Trọng lượng:</strong> 227 g</li>
+                                    </ul>
+                                </div>
+                                <!-- Modal Footer -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+
+
+
+
+
+
+        </div>
+        <h3>Các sản phẩm tương tự</h3>
+        <section class="wrap section-home-banner" style="margin-top: 20px;">
+            <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+                <section class="wrap">
+                    <div class="container">
+
+                        @{
+                            // Lấy ID danh mục từ ViewBag
+                            int categoryId = ViewBag.CategoryId != null ? (int)ViewBag.CategoryId : 0;
+
+                            // Kiểm tra nếu categoryId hợp lệ
+                            if (categoryId > 0)
+                            {
+                                // Gọi Component hiển thị sản phẩm tương tự
+                                @await Component.InvokeAsync("FeaturedProducts", new { Category = categoryId })
+                            }
+                            else
+                            {
+                                <p>Không có sản phẩm tương tự.</p>
+                            }
+                        }
+
+                        <!-- Nội dung carousel -->
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="path_to_image.jpg" class="d-block w-100" alt="...">
+                            </div>
+                            <!-- Các item carousel khác -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+            const categoryFields = {
+                "1": ["Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CameraSau", "CameraTruoc", "Sim", "DungLuong"], // iPhone
+                "2": ["Color", "KetNoi", "ChatLuongAmThanh", "ThoiLuongPin"], // AirPods
+                "3": ["Color", "CamBien", "KhaNangChongNuoc", "KichThuoc"], // Apple Watch
+                "4": ["Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CameraSau", "CameraTruoc", "Sim", "DungLuong"], // iPad
+                "5": ["Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CardDoHoa", "CongKetNoi", "TrongLuong"] // MacBook
+            };
+
+            function showConfigFields(categoryId) {
+                document.querySelectorAll(".config-field").forEach(field => {
+                    field.style.display = "none";
+                });
+
+                if (categoryFields[categoryId]) {
+                    categoryFields[categoryId].forEach(field => {
+                        const fieldElement = document.querySelector([data - field="${field}"]);
+                        if (fieldElement) {
+                            fieldElement.style.display = "block";
+                        }
+                    });
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                showConfigFields("@ViewBag.CategoryId");
+            });
+
+
+            $(document).ready(function () {
+                // Decrease Quantity
+                $('#btn-minus').click(function () {
+                    var currentValue = parseInt($('#productQuantity').val());
+                    if (currentValue > 1) {
+                        $('#productQuantity').val(currentValue - 1);
+                    }
+                });
+
+                // Increase Quantity
+                $('#btn-plus').click(function () {
+                    var currentValue = parseInt($('#productQuantity').val());
+                    $('#productQuantity').val(currentValue + 1);
+                });
+            });
+
+        </script>
+
+        <script>
+
+            function changeMainImage(imageUrl) {
+                const mainImage = document.getElementById('mainImage');
+                mainImage.src = imageUrl; // Cập nhật đường dẫn hình ảnh chính
+            }
+
+
+        </script>
+
+
+
+
+
+

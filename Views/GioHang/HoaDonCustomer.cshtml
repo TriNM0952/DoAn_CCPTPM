@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Lab03.Models.HoaDon>
+
+<div class="container mt-5">
+    <h2 class="text-center">Danh sách Hóa Đơn của Bạn</h2>
+
+    @if (!Model.Any())
+    {
+        <p class="text-center">Bạn chưa có hóa đơn nào.</p>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped mt-4">
+            <thead>
+                <tr>
+                    <th>Mã Hóa Đơn</th>
+                    <th>Ngày Đặt</th>
+                    <th>Tổng Cộng</th>
+                    <th>Trạng Thái</th>
+                    <th>Chi Tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var hoaDon in Model)
+                {
+                    <tr>
+                        <td>@hoaDon.Id</td>
+                        <td>@hoaDon.OrderDate.ToString("dd/MM/yyyy")</td>
+                        <td>@string.Format("{0:#,##0}", hoaDon.Total) VNĐ</td>
+                        <td>@hoaDon.OrderStatus</td>
+                        <td>
+                            <a asp-action="ChiTietHoaDonCustomer" asp-route-id="@hoaDon.Id" class="btn btn-info btn-sm">Xem Chi Tiết</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
