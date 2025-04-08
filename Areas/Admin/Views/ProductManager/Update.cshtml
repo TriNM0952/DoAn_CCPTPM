@@ -1,0 +1,192 @@
+﻿@model Lab03.Models.Inventory
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Edit Product";
+}
+
+<h2>Edit Product</h2>
+
+<form asp-action="Update" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <!-- Tên sản phẩm -->
+    <div class="form-group">
+        <label asp-for="SupplierProduct.ProductName">Name</label>
+        <input asp-for="SupplierProduct.ProductName" class="form-control" />
+        <span asp-validation-for="SupplierProduct.ProductName" class="text-danger"></span>
+    </div>
+
+    <!-- Giá -->
+    <div class="form-group">
+        <label asp-for="SellingPrice">Giá</label>
+        <input asp-for="SellingPrice" class="form-control" value="@String.Format("{0:#,##0}", Model.SellingPrice)" />
+        <span asp-validation-for="SellingPrice" class="text-danger"></span>
+    </div>
+
+    <!-- Mô tả -->
+    <div class="form-group">
+        <label asp-for="SupplierProduct.Description">Mô tả</label>
+        <textarea asp-for="SupplierProduct.Description" class="form-control"></textarea>
+        <span asp-validation-for="SupplierProduct.Description" class="text-danger"></span>
+    </div>
+
+    <!-- Thể loại (hiển thị không cho phép chỉnh sửa) -->
+    <div class="form-group">
+        <label>Thể loại (Không được chỉnh sửa thể loại)</label>
+        <input type="text" class="form-control" value="@ViewBag.CategoryName" disabled />
+        <input type="hidden" asp-for="SupplierProduct.CategoryId" />
+    </div>
+
+
+
+    <!-- Hình ảnh -->
+    <div class="form-group">
+        <label asp-for="SupplierProduct.ProductImages">Hình ảnh</label>
+        <input type="file" asp-for="SupplierProduct.ProductImages" class="form-control" />
+        <img src="~/images/@Model.SupplierProduct.ProductImages" alt="Product Image" style="max-width: 200px;" />
+    </div>
+
+    <!-- Thương hiệu -->
+    <div class="form-group">
+        <label asp-for="SupplierProduct.Brand">Thương hiệu</label>
+        <input asp-for="SupplierProduct.Brand" class="form-control" />
+        <span asp-validation-for="SupplierProduct.Brand" class="text-danger"></span>
+    </div>
+
+    <!-- Các trường cấu hình (SupplierProductConfig), tất cả sẽ bị ẩn lúc đầu -->
+    <h3>Cấu hình sản phẩm</h3>
+
+    <!-- Cấu hình chung -->
+    <div class="form-group SupplierProductConfig-field" data-field="Color" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.Color">Màu sắc</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.Color" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.Color" class="text-danger"></span>
+    </div>
+    <div class="form-group SupplierProductConfig-field" data-field="CPU" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.CPU">CPU</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.CPU" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.CPU" class="text-danger"></span>
+    </div>
+    <div class="form-group SupplierProductConfig-field" data-field="Ram" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.Ram">Ram</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.Ram" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.Ram" class="text-danger"></span>
+    </div>
+    <div class="form-group SupplierProductConfig-field" data-field="BoNhoTrong" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.BoNhoTrong">Bộ nhớ trong</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.BoNhoTrong" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.BoNhoTrong" class="text-danger"></span>
+    </div>
+
+    <!-- Cấu hình cho iPhone -->
+    <div class="form-group SupplierProductConfig-field" data-field="ManHinh" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.ManHinh">Màn hình</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.ManHinh" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.ManHinh" class="text-danger"></span>
+    </div>
+    <div class="form-group SupplierProductConfig-field" data-field="HeDieuHanh" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.HeDieuHanh">Hệ điều hành</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.HeDieuHanh" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.HeDieuHanh" class="text-danger"></span>
+    </div>
+    <div class="form-group SupplierProductConfig-field" data-field="CameraSau" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.CameraSau">Camera Sau</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.CameraSau" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.CameraSau" class="text-danger"></span>
+    </div>
+    <div class="form-group SupplierProductConfig-field" data-field="CameraTruoc" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.CameraTruoc">Camera Trước</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.CameraTruoc" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.CameraTruoc" class="text-danger"></span>
+    </div>
+    <div class="form-group SupplierProductConfig-field" data-field="Sim" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.Sim">Sim</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.Sim" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.Sim" class="text-danger"></span>
+    </div>
+    <div class="form-group SupplierProductConfig-field" data-field="DungLuong" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.DungLuong">Dung lượng pin</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.DungLuong" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.DungLuong" class="text-danger"></span>
+    </div>
+
+    <!-- Cấu hình cho MacBook -->
+    <div class="form-group SupplierProductConfig-field" data-field="CardDoHoa" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.CardDoHoa">Card đồ họa</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.CardDoHoa" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.CardDoHoa" class="text-danger"></span>
+    </div>
+    <div class="form-group SupplierProductConfig-field" data-field="CongKetNoi" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.CongKetNoi">Cổng kết nối</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.CongKetNoi" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.CongKetNoi" class="text-danger"></span>
+    </div>
+    <div class="form-group SupplierProductConfig-field" data-field="TrongLuong" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.TrongLuong">Trọng lượng</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.TrongLuong" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.TrongLuong" class="text-danger"></span>
+    </div>
+
+    <!-- Cấu hình cho AirPods -->
+    <div class="form-group SupplierProductConfig-field" data-field="KetNoi" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.KetNoi">Kết nối</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.KetNoi" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.KetNoi" class="text-danger"></span>
+    </div>
+    <div class="form-group SupplierProductConfig-field" data-field="ChatLuongAmThanh" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.ChatLuongAmThanh">Chất lượng âm thanh</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.ChatLuongAmThanh" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.ChatLuongAmThanh" class="text-danger"></span>
+    </div>
+    <div class="form-group SupplierProductConfig-field" data-field="ThoiLuongPin" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.ThoiLuongPin">Thời lượng pin</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.ThoiLuongPin" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.ThoiLuongPin" class="text-danger"></span>
+    </div>
+
+    <!-- Cấu hình cho Apple Watch -->
+    <div class="form-group SupplierProductConfig-field" data-field="CamBien" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.CamBien">Cảm biến</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.CamBien" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.CamBien" class="text-danger"></span>
+    </div>
+    <div class="form-group SupplierProductConfig-field" data-field="KhaNangChongNuoc" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.KhaNangChongNuoc">Khả năng chống nước</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.KhaNangChongNuoc" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.KhaNangChongNuoc" class="text-danger"></span>
+    </div>
+    <div class="form-group SupplierProductConfig-field" data-field="KichThuoc" style="display: none;">
+        <label asp-for="SupplierProduct.SupplierProductConfig.KichThuoc">Kích thước</label>
+        <input asp-for="SupplierProduct.SupplierProductConfig.KichThuoc" class="form-control" />
+        <span asp-validation-for="SupplierProduct.SupplierProductConfig.KichThuoc" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    <button asp-action="Index" class="btn btn-secondary">Hủy</button>
+</form>
+
+<script>
+    const categoryFields = {
+        "1": ["Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CameraSau", "CameraTruoc", "Sim", "DungLuong"],
+        "2": ["Color", "KetNoi", "ChatLuongAmThanh", "ThoiLuongPin"],
+        "3": ["Color", "CamBien", "KhaNangChongNuoc", "KichThuoc"],
+        "4": ["Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CameraSau", "CameraTruoc", "Sim", "DungLuong"],
+        "5": ["Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CardDoHoa", "CongKetNoi", "TrongLuong"]
+    };
+
+    function showSupplierProductConfigFields(categoryId) {
+        document.querySelectorAll(".SupplierProductConfig-field").forEach(field => {
+            field.style.display = "none";
+        });
+
+        if (categoryFields[categoryId]) {
+            categoryFields[categoryId].forEach(field => {
+                document.querySelector(`[data-field="${field}"]`).style.display = "block";
+            });
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        showSupplierProductConfigFields("@Model.SupplierProduct.CategoryId");
+    });
+</script>

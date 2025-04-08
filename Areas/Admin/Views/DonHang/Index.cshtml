@@ -1,0 +1,164 @@
+﻿@model IEnumerable<Lab03.Models.HoaDon>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Danh Sách Đơn Hàng</title>
+    <link rel="stylesheet" href="~/vendors/typicons/typicons.css">
+    <link rel="stylesheet" href="~/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/css/vertical-layout-light/style.css">
+    <link rel="shortcut icon" href="~/images/favicon.png" />
+    <style>
+        /* Container and Table Styles */
+        .container {
+            margin-top: 2rem;
+            background-color: #f9f9f9;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table th {
+            background-color: #007bff;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        /* Scrollbar Styling */
+        .table-responsive::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb {
+            background-color: #007bff;
+            border-radius: 4px;
+        }
+
+        .table-responsive::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+        }
+
+        /* Button Styling */
+        .btn-info, .btn-secondary, .btn-primary {
+            font-weight: bold;
+        }
+
+        .btn-info {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        /* Form and Button Inside Table */
+        .table td .btn-group .dropdown-menu a,
+        .table td .input-group textarea {
+            font-size: 0.9rem;
+        }
+
+        .table td .btn-sm {
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mb-4">
+        <h2 class="text-primary text-center mb-4">Danh sách Đơn Hàng</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên khách hàng</th>
+                        <th>Địa chỉ</th>
+                        <th>Ngày mua</th>
+                        <th>Trạng thái</th>
+                        <th>Phương thức giao hàng</th>
+                        <th>Tổng cộng</th>
+                        <th>Ghi chú</th>
+                        <th class="text-center">Chức năng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int stt = 1;
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@stt</td>
+                            <td>@item.CustomerName</td>
+                            <td>@item.Address</td>
+                            <td>@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                            <td class="font-weight-bold">@item.OrderStatus</td>
+                            <td>@(item.ShippingAddress ?? "Mua trực tiếp")</td>
+                            <td>@string.Format("{0:#,##0}", item.Total) VNĐ</td>
+                            <td>@item.Note</td>
+                            <td class="text-center" style="min-width:300px">
+                                <div class="d-flex flex-column align-items-center">
+                                    <!-- Order Details Button -->
+                                    <a href="~/Admin/DonHang/ChiTietDonHang/@item.Id" class="btn btn-info btn-sm mb-2">
+                                        <i class="typcn typcn-info-large"></i> Chi tiết
+                                    </a>
+
+                                    <!-- Dropdown to Update Order Status -->
+                                    <div class="btn-group mb-2">
+                                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                                            <i class="typcn typcn-refresh"></i> Cập nhật trạng thái
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="~/Admin/DonHang/CapNhatTrangThai?id=@item.Id&newStatus=Đang chuẩn bị">Đang chuẩn bị</a>
+                                            <a class="dropdown-item" href="~/Admin/DonHang/CapNhatTrangThai?id=@item.Id&newStatus=Đang vận chuyển">Đang vận chuyển</a>
+                                            <a class="dropdown-item" href="~/Admin/DonHang/CapNhatTrangThai?id=@item.Id&newStatus=Đã nhận hàng">Đã nhận hàng</a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Custom Status Textarea with Save Button -->
+                                    <form action="~/Admin/DonHang/CapNhatTrangThai" method="get" class="w-100">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <div class="input-group input-group-sm">
+                                            <textarea name="newStatus" placeholder="Nhập trạng thái" class="form-control" style="resize: vertical; min-height: 60px; max-height: 100px; min-width:100px"></textarea>
+                                            <div class="input-group-append">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="typcn typcn-tick">Cập nhật</i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        stt++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/js/off-canvas.js"></script>
+    <script src="~/js/hoverable-collapse.js"></script>
+    <script src="~/js/template.js"></script>
+    <script src="~/js/settings.js"></script>
+    <script src="~/js/todolist.js"></script>
+</body>
+
+</html>

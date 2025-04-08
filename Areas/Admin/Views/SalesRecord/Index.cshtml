@@ -1,0 +1,137 @@
+﻿@model IEnumerable<Lab03.Models.SalesRecord>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Doanh thu</title>
+    <link rel="stylesheet" href="~/vendors/typicons/typicons.css">
+    <link rel="stylesheet" href="~/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/css/vertical-layout-light/style.css">
+    <link rel="shortcut icon" href="~/images/favicon.png" />
+    <style>
+        /* Container and Table Styles */
+        .container {
+            margin-top: 2rem;
+            background-color: #f9f9f9;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #007bff;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table th {
+            background-color: #007bff;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        /* Scrollbar Styling */
+        .table-responsive::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb {
+            background-color: #007bff;
+            border-radius: 4px;
+        }
+
+        .table-responsive::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+        }
+
+        /* Button Styling */
+        .btn-info, .btn-secondary, .btn-primary {
+            font-weight: bold;
+        }
+
+        .btn-info {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>@ViewData["Title"]</h2>
+        <div>
+            <h3>
+                Tổng doanh thu: @string.Format("{0:#,##0} VNĐ", ViewBag.TotalRevenue)
+            </h3>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Mã đơn hàng</th>
+                        <th>Tên khách hàng</th>
+                        <th>Sản phẩm</th>
+                        <th>Ngày bán</th>
+                        <th>Giá bán</th>
+                        <th>Giá nhập</th>
+                        <th>Phí vận chuyển</th>
+                        <th>Thuế</th>
+                        <th>Lợi nhuận thực tế</th>
+                        <th>Hình thức thanh toán</th>
+                        <th>Địa chỉ vận chuyển</th>
+                        <th>Giảm giá</th>
+                        <th>Trạng thái đơn hàng</th>
+                      
+                        <th>Tổng đơn hàng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var record in Model)
+                    {
+                        <tr>
+                            <td>@record.OrderId</td>
+                            <td>@record.CustomerName</td>
+                            <td>@record.ProductName</td>
+                            <td>@record.SaleDate.ToString("dd/MM/yyyy")</td>
+                            <td>@string.Format("{0:#,##0} VNĐ", record.SalePrice)</td>
+                            <td>@string.Format("{0:#,##0} VNĐ", record.PurchasePrice)</td>
+                            <td>@string.Format("{0:#,##0} VNĐ", record.ShippingCost)</td>
+                            <td>@string.Format("{0:#,##0} VNĐ", record.TaxAmount)</td>
+                            <td>@string.Format("{0:#,##0} VNĐ", record.ActualProfit)</td>
+                            <td>@record.PaymentMethod</td>
+                            <td>@record.ShippingAddress</td>
+                            <td>@string.Format("{0:#,##0} VNĐ", record.Discount)</td>
+                            <td>@record.OrderStatus</td>
+                           
+                            <td>@string.Format("{0:#,##0} VNĐ", record.OrderTotal)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/js/off-canvas.js"></script>
+    <script src="~/js/hoverable-collapse.js"></script>
+    <script src="~/js/template.js"></script>
+    <script src="~/js/settings.js"></script>
+    <script src="~/js/todolist.js"></script>
+</body>
+
+</html>

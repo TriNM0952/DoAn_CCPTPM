@@ -1,0 +1,108 @@
+﻿@model IEnumerable<Lab03.Models.Category>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Danh sách Thể Loại</title>
+    <link rel="stylesheet" href="~/vendors/typicons/typicons.css">
+    <link rel="stylesheet" href="~/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/css/vertical-layout-light/style.css">
+    <style>
+        .container {
+            margin-top: 2rem;
+            background-color: #f9f9f9;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table th {
+            background-color: #007bff;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .btn-primary, .btn-warning, .btn-danger {
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        /* Scrollbar Styling */
+        .table-responsive::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb {
+            background-color: #007bff;
+            border-radius: 4px;
+        }
+
+        .table-responsive::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h2 class="text-primary">Danh sách Thể Loại</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên Thể Loại</th>
+                        <th>Chức Năng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int stt = 1;
+                    }
+                    @foreach (var category in Model)
+                    {
+                        <tr>
+                            <td>@stt</td>
+                            <td>@category.Name</td>
+                            <td>
+                                <a asp-action="Update" asp-route-id="@category.Id" class="btn btn-warning btn-sm">Chỉnh sửa</a>
+                                <a asp-action="Delete" asp-route-id="@category.Id" class="btn btn-danger btn-sm">Xóa</a>
+                            </td>
+                        </tr>
+                        stt++;
+                    }
+                </tbody>
+            </table>
+        </div>
+        <a asp-controller="Category" asp-action="Add" class="btn btn-primary mt-3">Thêm mới</a>
+    </div>
+
+    <script src="~/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/js/off-canvas.js"></script>
+    <script src="~/js/hoverable-collapse.js"></script>
+    <script src="~/js/template.js"></script>
+    <script src="~/js/settings.js"></script>
+    <script src="~/js/todolist.js"></script>
+</body>
+</html>

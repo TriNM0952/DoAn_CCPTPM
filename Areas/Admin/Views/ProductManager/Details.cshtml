@@ -1,0 +1,156 @@
+﻿@model Lab03.Models.Inventory
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+
+<h2>Product Details</h2>
+
+<div class="form-group">
+    <label>Tên sản phẩm:</label>
+    <p class="form-control-static">@Model.SupplierProduct.ProductName ?? "N/A"</p>
+</div>
+
+<div class="form-group">
+    <label>Giá:</label>
+    <p class="form-control-static">@String.Format("{0:#,##0} VNĐ", Model.SellingPrice )</p>
+</div>
+
+<div class="form-group">
+    <label>Mô tả:</label>
+    <p class="form-control-static">@Model.SupplierProduct.Description ?? "N/A"</p>
+</div>
+
+<div class="form-group">
+    <label>Thể loại:</label>
+    <p class="form-control-static">@ViewBag.CategoryName ?? "N/A"</p>
+</div>
+
+<div class="form-group">
+    <label>Hình ảnh:</label>
+    <img src="~/images/@Model.SupplierProduct.ProductImages" alt="Product Image" style="max-width: 200px;" />
+</div>
+
+<div class="form-group">
+    <label>Thương hiệu:</label>
+    <p class="form-control-static">@Model.SupplierProduct.Brand ?? "N/A"</p>
+</div>
+
+<h3>Cấu hình sản phẩm</h3>
+
+<div class="form-group config-field" data-field="Color" style="display: none;">
+    <label>Màu sắc:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.Color ?? "N/A"</p>
+</div>
+<div class="form-group config-field" data-field="CPU" style="display: none;">
+    <label>CPU:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.CPU ?? "N/A"</p>
+</div>
+<div class="form-group config-field" data-field="Ram" style="display: none;">
+    <label>Ram:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.Ram ?? "N/A"</p>
+</div>
+<div class="form-group config-field" data-field="BoNhoTrong" style="display: none;">
+    <label>Bộ nhớ trong:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.BoNhoTrong ?? "N/A"</p>
+</div>
+
+<!-- Cấu hình cho iPhone -->
+<div class="form-group config-field" data-field="ManHinh" style="display: none;">
+    <label>Màn hình:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.ManHinh ?? "N/A"</p>
+</div>
+<div class="form-group config-field" data-field="HeDieuHanh" style="display: none;">
+    <label>Hệ điều hành:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.HeDieuHanh ?? "N/A"</p>
+</div>
+<div class="form-group config-field" data-field="CameraSau" style="display: none;">
+    <label>Camera Sau:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.CameraSau ?? "N/A"</p>
+</div>
+<div class="form-group config-field" data-field="CameraTruoc" style="display: none;">
+    <label>Camera Trước:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.CameraTruoc ?? "N/A"</p>
+</div>
+<div class="form-group config-field" data-field="Sim" style="display: none;">
+    <label>Sim:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.Sim ?? "N/A"</p>
+</div>
+<div class="form-group config-field" data-field="DungLuong" style="display: none;">
+    <label>Dung lượng pin:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.DungLuong ?? "N/A"</p>
+</div>
+
+<!-- Cấu hình cho MacBook -->
+<div class="form-group config-field" data-field="CardDoHoa" style="display: none;">
+    <label>Card đồ họa:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.CardDoHoa ?? "N/A"</p>
+</div>
+<div class="form-group config-field" data-field="CongKetNoi" style="display: none;">
+    <label>Cổng kết nối:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.CongKetNoi ?? "N/A"</p>
+</div>
+<div class="form-group config-field" data-field="TrongLuong" style="display: none;">
+    <label>Trọng lượng:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.SupplierProductConfig.TrongLuong ?? "N/A"</p>
+</div>
+
+<!-- Cấu hình cho AirPods -->
+<div class="form-group config-field" data-field="KetNoi" style="display: none;">
+    <label>Kết nối:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.KetNoi ?? "N/A"</p>
+</div>
+<div class="form-group config-field" data-field="ChatLuongAmThanh" style="display: none;">
+    <label>Chất lượng âm thanh:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.ChatLuongAmThanh ?? "N/A"</p>
+</div>
+<div class="form-group config-field" data-field="ThoiLuongPin" style="display: none;">
+    <label>Thời lượng pin:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.ThoiLuongPin ?? "N/A"</p>
+</div>
+
+<!-- Cấu hình cho Apple Watch -->
+<div class="form-group config-field" data-field="CamBien" style="display: none;">
+    <label>Cảm biến:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.CamBien ?? "N/A"</p>
+</div>
+<div class="form-group config-field" data-field="KhaNangChongNuoc" style="display: none;">
+    <label>Khả năng chống nước:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.KhaNangChongNuoc ?? "N/A"</p>
+</div>
+<div class="form-group config-field" data-field="KichThuoc" style="display: none;">
+    <label>Kích thước:</label>
+    <p class="form-control-static">@Model.SupplierProduct.SupplierProductConfig??.KichThuoc ?? "N/A"</p>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">Trở về</a>
+
+<script>
+    const categoryFields = {
+        "1": ["Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CameraSau", "CameraTruoc", "Sim", "DungLuong"],
+        "2": ["Color", "KetNoi", "ChatLuongAmThanh", "ThoiLuongPin"],
+        "3": ["Color", "CamBien", "KhaNangChongNuoc", "KichThuoc"],
+        "4": ["Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CameraSau", "CameraTruoc", "Sim", "DungLuong"],
+        "5": ["Color", "CPU", "Ram", "ManHinh", "HeDieuHanh", "CardDoHoa", "CongKetNoi", "TrongLuong"]
+    };
+
+    function showConfigFields(categoryId) {
+        document.querySelectorAll(".config-field").forEach(field => {
+            field.style.display = "none";
+        });
+
+        if (categoryFields[categoryId]) {
+            categoryFields[categoryId].forEach(field => {
+                const fieldElement = document.querySelector(`[data-field="${field}"]`);
+                if (fieldElement) {
+                    fieldElement.style.display = "block";
+                }
+            });
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        showConfigFields("@Model.SupplierProduct.CategoryId");
+    });
+</script>

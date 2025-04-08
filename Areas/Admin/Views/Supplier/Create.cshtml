@@ -1,0 +1,85 @@
+﻿@model Lab03.Models.Supplier
+
+<h2 class="text-center text-primary mb-4">Thêm Nhà Cung Cấp</h2>
+
+<form asp-action="Create" method="post" class="p-4 shadow-sm bg-light rounded" style="margin-bottom:20px">
+    <div class="form-group">
+        <label asp-for="SupplierName">Tên Nhà Cung Cấp</label>
+        <input asp-for="SupplierName" class="form-control shadow-sm" placeholder="Nhập tên nhà cung cấp" />
+        <span asp-validation-for="SupplierName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ContactName">Tên Người Liên Hệ</label>
+        <input asp-for="ContactName" class="form-control shadow-sm" placeholder="Nhập tên người liên hệ" />
+        <span asp-validation-for="ContactName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PhoneNumber">Số Điện Thoại</label>
+        <input asp-for="PhoneNumber" class="form-control shadow-sm" placeholder="Nhập số điện thoại" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email">Email</label>
+        <input asp-for="Email" type="email" class="form-control shadow-sm" placeholder="Nhập email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Address">Địa Chỉ</label>
+        <input asp-for="Address" class="form-control shadow-sm" placeholder="Nhập địa chỉ" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ContractStartDate">Ngày Bắt Đầu Hợp Đồng</label>
+        <input asp-for="ContractStartDate" type="date" class="form-control shadow-sm" />
+        <span asp-validation-for="ContractStartDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ContractEndDate">Ngày Kết Thúc Hợp Đồng (Tùy Chọn)</label>
+        <input asp-for="ContractEndDate" type="date" class="form-control shadow-sm" />
+        <span asp-validation-for="ContractEndDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BankAccountNumber">Số Tài Khoản Ngân Hàng</label>
+        <input asp-for="BankAccountNumber" class="form-control shadow-sm" placeholder="Nhập số tài khoản ngân hàng" />
+        <span asp-validation-for="BankAccountNumber" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BankName">Tên Ngân Hàng</label>
+        <input asp-for="BankName" class="form-control shadow-sm" placeholder="Nhập tên ngân hàng" />
+        <span asp-validation-for="BankName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TaxCode">Mã Số Thuế</label>
+        <input asp-for="TaxCode" class="form-control shadow-sm" placeholder="Nhập mã số thuế" />
+        <span asp-validation-for="TaxCode" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Notes">Ghi Chú</label>
+        <textarea asp-for="Notes" class="form-control shadow-sm" placeholder="Nhập ghi chú thêm"></textarea>
+        <span asp-validation-for="Notes" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CostPrice">Giá Vốn</label>
+        <input asp-for="CostPrice" type="number" step="0.01" class="form-control shadow-sm" placeholder="Nhập giá vốn" />
+        <span asp-validation-for="CostPrice" class="text-danger"></span>
+    </div>
+
+    <div class="form-group text-center mt-4">
+        <button type="submit" class="btn btn-primary btn-lg shadow-sm hover-shadow">Thêm</button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
