@@ -1,0 +1,296 @@
+﻿body {
+}
+
+.product-gallery-big {
+    margin-bottom: 15px;
+    min-width: 95%;
+}
+/*CỘT 1*/
+/* Hình ảnh chính */
+
+
+/* GIÁ TIỀN SẢN PHẨM*/
+/* Price Options Container */
+.price-options {
+    padding: 10px;
+    text-align: left; /* Căn trái nội dung */
+    font-size: 44px; /* Kích cỡ chữ lớn hơn */
+    font-weight: bold; /* Chữ đậm */
+    color: #dc3545; /* Màu đỏ nổi bật */
+}
+
+.color-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 cột, chia đều */
+    gap: 10px; /* Khoảng cách giữa các ô */
+    max-width: 600px; /* Chiều rộng tối đa */
+    margin: auto; /* Căn giữa container */
+    margin-bottom: 50px;
+}
+
+.color-option {
+    width: 150px;
+    height: 70px;
+    margin-bottom: 0px;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #ddd; /* Viền mặc định */
+    border-radius: 8px; /* Bo góc */
+    padding: 10px; /* Khoảng cách bên trong */
+    text-align: center;
+    cursor: pointer;
+    background-color: #fff; /* Nền trắng */
+    transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.price {
+    font-size: 12px;
+    font-weight: bold;
+    color: red;
+}
+
+.color-option.active {
+    flex-direction: row;
+    display: flex;
+}
+
+.color-option:hover {
+    transform: scale(1.05); /* Phóng to nhẹ khi hover */
+    border-color: #ff0018; /* Viền xanh khi hover */
+}
+
+.color-option img {
+    width: 63px; /* Kích thước hình ảnh */
+    height: 50px;
+    object-fit: cover;
+    margin-bottom: 10px; /* Khoảng cách giữa hình và thông tin */
+    border-radius: 5px; /* Bo góc hình ảnh */
+}
+
+.color-info {
+    text-align: center;
+    margin-top: -62px;
+}
+
+    .color-info p {
+        margin: 0;
+        font-size: 14px; /* Kích thước chữ */
+        color: #333; /* Màu chữ */
+    }
+
+    .color-info .price {
+        font-weight: bold;
+        color: #dc3545; /* Màu đỏ cho giá */
+    }
+
+
+/*HÀNG 2 CỘT 2*/
+/* Tổng thể cho khung thông số kỹ thuật */
+.specifications {
+    background-color: #f9f9f9; /* Nền xám nhạt */
+    border: 1px solid #ddd; /* Viền màu xám */
+    border-radius: 8px; /* Bo góc */
+    padding: 20px; /* Khoảng cách bên trong */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ */
+    margin-bottom: 20px; /* Khoảng cách dưới */
+}
+
+/* Tiêu đề của phần thông số kỹ thuật */
+.spec-title {
+    font-size: 18px; /* Kích thước chữ lớn */
+    font-weight: bold; /* Chữ đậm */
+    color: #333; /* Màu chữ đậm */
+    display: flex; /* Flex để căn giữa icon và text */
+    align-items: center; /* Căn giữa icon và text theo chiều dọc */
+    margin-bottom: 15px; /* Khoảng cách dưới tiêu đề */
+    background-color: #59AB6E; /* Nền xanh lá */
+    color: #fff; /* Màu chữ trắng */
+    padding: 10px 15px; /* Khoảng cách bên trong */
+    border-radius: 5px; /* Bo góc */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+}
+
+    /* Icon trong tiêu đề */
+    .spec-title i {
+        margin-right: 8px; /* Khoảng cách giữa icon và text */
+        font-size: 20px; /* Kích thước icon */
+    }
+
+/* Danh sách thông số kỹ thuật */
+.spec-list {
+    list-style-type: none; /* Loại bỏ bullet */
+    padding: 0; /* Xóa padding mặc định */
+    margin: 0; /* Xóa margin mặc định */
+    font-size: 14px; /* Kích thước chữ */
+    color: #666; /* Màu chữ xám nhạt */
+}
+
+    /* Từng mục trong danh sách */
+    .spec-list li {
+        padding: 10px 0; /* Khoảng cách trên và dưới */
+        border-bottom: 1px solid #ddd; /* Đường kẻ dưới mỗi mục */
+    }
+
+        /* Loại bỏ đường kẻ cuối cùng */
+        .spec-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Phần chữ in đậm (label) */
+        .spec-list li strong {
+            color: #333; /* Màu đậm hơn cho nhãn */
+        }
+
+/* Nút "Xem chi tiết thông số" */
+.view-more-btn {
+    display: block; /* Block để căn giữa */
+    margin: 20px auto 0; /* Căn giữa nút và tạo khoảng cách trên */
+    padding: 10px 20px; /* Khoảng cách bên trong */
+    background-color: #999999; /* Nền xanh lá */
+    color: #fff; /* Chữ trắng */
+    border: none; /* Xóa viền mặc định */
+    border-radius: 5px; /* Bo góc nút */
+    font-size: 14px; /* Kích thước chữ */
+    font-weight: bold; /* Chữ đậm */
+    cursor: pointer; /* Con trỏ dạng tay */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Hiệu ứng mượt */
+}
+
+    /* Hiệu ứng hover cho nút */
+    .view-more-btn:hover {
+        background-color: #218838; /* Màu đậm hơn khi hover */
+        transform: scale(1.05); /* Phóng to nhẹ */
+    }
+
+
+
+
+
+
+
+
+
+.btn-buy-now {
+    font-size: 20px; /* Tăng kích thước chữ */
+    padding: 15px 30px; /* Tăng padding cho nút */
+    border-radius: 5px; /* Bo góc nút */
+    background-color: #ce0000; /* Màu nền (có thể thay đổi theo ý muốn) */
+    color: white; /* Màu chữ */
+    border: none; /* Bỏ viền */
+    cursor: pointer; /* Thêm hiệu ứng con trỏ */
+    transition: all 0.3s ease; /* Hiệu ứng khi hover */
+}
+
+.btn-add-to-cart {
+    font-size: 20px; /* Tăng kích thước chữ */
+    padding: 15px 30px; /* Tăng padding cho nút */
+    border-radius: 5px; /* Bo góc nút */
+    background-color: #17a2b8; /* Màu nền (có thể thay đổi theo ý muốn) */
+    color: white; /* Màu chữ */
+    border: none; /* Bỏ viền */
+    cursor: pointer; /* Thêm hiệu ứng con trỏ */
+    transition: all 0.3s ease; /* Hiệu ứng khi hover */
+}
+
+    .btn-buy-now:hover, .btn-add-to-cart:hover {
+        background-color: #8c0000; /* Màu nền khi hover */
+        transform: scale(1.1); /* Tăng kích thước nút khi hover */
+    }
+
+
+
+/* Modal style */
+
+.modal-dialog {
+    max-width: 80% !important; /* Chiều rộng modal rộng hơn */
+    margin: 30px auto; /* Căn giữa modal trên màn hình */
+    border-radius: 20px; /* Viền tròn cho modal */
+}
+
+.modal-content {
+    left: -10px;
+    background: #f9f9f9; /* Màu nền modal sáng */
+    border-radius: 20px; /* Viền tròn cho content */
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Thêm bóng cho modal */
+}
+
+.modal-header {
+    background-color: #000000;
+    color: white;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    padding: 9px;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.close {
+    color: black; /* Màu chữ của nút đóng */
+    font-size: 1.5rem;
+    opacity: 1; /* Làm cho nút đóng rõ hơn */
+}
+
+.modal-body {
+    padding: 25px;
+    font-size: 1rem;
+    line-height: 1.5;
+    max-height: 75vh; /* Chiều cao tối đa cho modal */
+    overflow-y: auto; /* Thêm cuộn nếu nội dung dài */
+}
+
+    .modal-body h4 {
+        background-color: #d1d1d1;
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #333; /* Màu tiêu đề */
+        margin-top: 20px;
+    }
+
+    .modal-body ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    .modal-body li {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
+.modal-footer {
+    background-color: #f1f1f1; /* Màu nền của footer */
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    text-align: center;
+}
+
+    .modal-footer .btn {
+        background-color: black; /* Màu nền nút */
+        color: white; /* Màu chữ trắng */
+        font-weight: bold;
+        border-radius: 5px; /* Viền nút bo tròn */
+        padding: 10px 25px;
+        border: none;
+    }
+
+        .modal-footer .btn:hover {
+            background-color: #fd0000; /* Màu nền nút khi hover */
+        }
+
+.view-more-btn {
+    background-color: #1e90ff; /* Màu nền của nút Xem chi tiết */
+    color: white; /* Màu chữ trắng */
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+    .view-more-btn:hover {
+        background-color: #4682b4; /* Màu nền khi hover */
+    }
