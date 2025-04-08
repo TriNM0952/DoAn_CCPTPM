@@ -1,0 +1,82 @@
+[
+  {
+    "ContainingType": "NetCoreDemo.Controllers.OrderController",
+    "Method": "GetOrder",
+    "RelativePath": "Order/{orderId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NetCoreDemo.Controllers.OrderController",
+    "Method": "CancelOrder",
+    "RelativePath": "Order/{orderId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NetCoreDemo.Controllers.OrderController",
+    "Method": "ConfirmWebhook",
+    "RelativePath": "Order/confirm-webhook",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "body",
+        "Type": "NetCoreDemo.Types.ConfirmWebhook",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NetCoreDemo.Controllers.OrderController",
+    "Method": "CreatePaymentLink",
+    "RelativePath": "Order/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "body",
+        "Type": "NetCoreDemo.Types.CreatePaymentLinkRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NetCoreDemo.Controllers.PaymentController",
+    "Method": "payOSTransferHandler",
+    "RelativePath": "Payment/payos_transfer_handler",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "body",
+        "Type": "Net.payOS.Types.WebhookType",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
